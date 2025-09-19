@@ -37,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
 
   final SettingsController controller = Get.put(SettingsController());
 
-  final RxInt currentIndex = 5.obs;
+  final RxInt currentIndex = 4.obs;
 
   @override
   Widget build(BuildContext context) {

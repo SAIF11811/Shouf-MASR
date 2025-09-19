@@ -6,7 +6,7 @@ import '../widgets/bottom_nav.dart';
 class NotificationsScreen extends StatelessWidget {
   NotificationsScreen({super.key});
 
-  final RxInt currentIndex = 4.obs;
+  final RxInt currentIndex = 3.obs;
 
   @override
   Widget build(BuildContext context) {

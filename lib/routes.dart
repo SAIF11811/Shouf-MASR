@@ -4,22 +4,19 @@ import 'screens/splash_screen.dart';
 import 'screens/role_selection.dart';
 import 'screens/traveler_auth.dart';
 import 'screens/traveler_login.dart';
-import 'screens/traveler_signup.dart'; // <-- Added signup
+import 'screens/traveler_signup.dart';
 import 'screens/agency_signup.dart';
 import 'screens/agency_contact.dart';
 import 'screens/search_screen.dart';
 import 'screens/offers_screen.dart';
 import 'screens/trip_details_screen.dart';
-import 'screens/reviews_screen.dart';
 import 'screens/company_profile.dart';
 import 'screens/requests_screen.dart';
 import 'screens/waiting_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/article_screen.dart';
-import 'screens/my_offers_screen.dart';
 import 'screens/notifications_screen.dart';
 import 'screens/offer_details_screen.dart';
-import 'screens/messages_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/send_offer_screen.dart';
 import 'screens/not_found_screen.dart';
@@ -69,16 +66,13 @@ final appRoutes = [
   GetPage(name: '/setting', page: () => SettingsScreen()),
   GetPage(name: '/offers', page: () => const OffersScreen()),
   GetPage(name: '/trip-details', page: () => const TripDetailsScreen()),
-  GetPage(name: '/reviews', page: () => const ReviewsScreen()),
   GetPage(name: '/company-profile', page: () => const CompanyProfileScreen()),
   GetPage(name: '/requests', page: () => const RequestsScreen()),
   GetPage(name: '/waiting', page: () => const WaitingScreen()),
   GetPage(name: '/home', page: () => const HomeScreen()),
   GetPage(name: '/article', page: () => const ArticleScreen()),
-  GetPage(name: '/my-offers', page: () => const MyOffersScreen()),
   GetPage(name: '/notifications', page: () => NotificationsScreen()),
   GetPage(name: '/offer-details', page: () => const OfferDetailsScreen()),
-  GetPage(name: '/messages', page: () => const MessagesScreen()),
   GetPage(name: '/chat', page: () => const ChatScreen()),
   GetPage(name: '/send-offer', page: () => const SendOfferScreen()),
   GetPage(name: '/404', page: () => const NotFoundScreen()),
