@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../widgets/components.dart';
 import 'role_selection.dart';
 
@@ -11,12 +13,31 @@ class AgencyContact extends StatefulWidget {
 }
 
 class _AgencyContactState extends State<AgencyContact> {
-
   final contactName = TextEditingController();
   final password = TextEditingController();
   final position = TextEditingController();
   final phone = TextEditingController();
   final address = TextEditingController();
+
+  final ImagePicker _picker = ImagePicker();
+
+  File? _tradeLicense;
+  File? _companyLogo;
+  File? _samplePackage;
+
+  Future<void> _pickImage(Function(File) onPicked) async {
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          onPicked(File(pickedFile.path));
+        });
+      }
+    } catch (e) {
+      debugPrint("Error picking image: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +81,7 @@ class _AgencyContactState extends State<AgencyContact> {
                     hintText: "Enter contact name",
                     prefixIcon: Icons.person,
                     validator: (value) =>
-                    value == null || value.isEmpty
-                        ? "Enter contact name"
-                        : null,
+                    value == null || value.isEmpty ? "Enter contact name" : null,
                   ),
                   const SizedBox(height: 16),
 
@@ -74,9 +93,7 @@ class _AgencyContactState extends State<AgencyContact> {
                     isPassword: true,
                     prefixIcon: Icons.lock,
                     validator: (value) =>
-                    value == null || value.length < 6
-                        ? "Min 6 characters"
-                        : null,
+                    value == null || value.length < 6 ? "Min 6 characters" : null,
                   ),
                   const SizedBox(height: 16),
 
@@ -87,9 +104,7 @@ class _AgencyContactState extends State<AgencyContact> {
                     hintText: "Enter position",
                     prefixIcon: Icons.work,
                     validator: (value) =>
-                    value == null || value.isEmpty
-                        ? "Enter position"
-                        : null,
+                    value == null || value.isEmpty ? "Enter position" : null,
                   ),
                   const SizedBox(height: 16),
 
@@ -101,9 +116,7 @@ class _AgencyContactState extends State<AgencyContact> {
                     prefixIcon: Icons.phone,
                     keyboardType: TextInputType.phone,
                     validator: (value) =>
-                    value == null || value.isEmpty
-                        ? "Enter phone number"
-                        : null,
+                    value == null || value.isEmpty ? "Enter phone number" : null,
                   ),
                   const SizedBox(height: 16),
 
@@ -114,18 +127,19 @@ class _AgencyContactState extends State<AgencyContact> {
                     hintText: "Enter address",
                     prefixIcon: Icons.location_on,
                     validator: (value) =>
-                    value == null || value.isEmpty
-                        ? "Enter company address"
-                        : null,
+                    value == null || value.isEmpty ? "Enter company address" : null,
                   ),
                   const SizedBox(height: 16),
 
-                  // File Uploads styled like text fields
-                  _buildUploadField("Trade License"),
+                  // File Uploads
+                  _buildUploadField("Trade License", _tradeLicense,
+                          (file) => _tradeLicense = file),
                   const SizedBox(height: 16),
-                  _buildUploadField("Company Logo"),
+                  _buildUploadField("Company Logo", _companyLogo,
+                          (file) => _companyLogo = file),
                   const SizedBox(height: 16),
-                  _buildUploadField("Sample Package PDF"),
+                  _buildUploadField("Sample Package PDF", _samplePackage,
+                          (file) => _samplePackage = file),
                   const SizedBox(height: 30),
 
                   Row(
@@ -148,7 +162,7 @@ class _AgencyContactState extends State<AgencyContact> {
                       CustomElevatedButton(
                         text: "Sign Up",
                         onPressed: () {
-                            Get.toNamed('/requests');
+                          Get.toNamed('/requests');
                         },
                         fullWidth: false,
                         backgroundColor: Colors.white,
@@ -167,7 +181,8 @@ class _AgencyContactState extends State<AgencyContact> {
     );
   }
 
-  Widget _buildUploadField(String label) {
+  Widget _buildUploadField(
+      String label, File? selectedFile, Function(File) onPicked) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -190,21 +205,29 @@ class _AgencyContactState extends State<AgencyContact> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Text(
-                  "No file chosen",
-                  style: TextStyle(
+                  selectedFile != null ? "File selected" : "No file chosen",
+                  style: const TextStyle(
                     color: Colors.black54,
                     fontSize: 16,
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  // TODO: Implement file picker
-                },
-                icon: const Icon(Icons.attach_file, color: Colors.black),
+              Row(
+                children: [
+                  if (selectedFile != null)
+                    SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: Image.file(selectedFile, fit: BoxFit.cover),
+                    ),
+                  IconButton(
+                    onPressed: () => _pickImage(onPicked),
+                    icon: const Icon(Icons.attach_file, color: Colors.black),
+                  ),
+                ],
               ),
             ],
           ),
