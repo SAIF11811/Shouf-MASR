@@ -48,10 +48,10 @@ class AgencySettingsScreen extends StatelessWidget {
             icon: const Icon(Icons.logout),
             onPressed: () {
               Get.defaultDialog(
-                title: 'Logout',
-                middleText: 'Are you sure you want to logout?',
+                title: 'Log out',
+                middleText: 'Are you sure you want to log out?',
                 textCancel: 'Cancel',
-                textConfirm: 'Logout',
+                textConfirm: 'Log out',
                 confirmTextColor: Colors.white,
                 cancelTextColor: Colors.black,
                 backgroundColor: Colors.white,
@@ -62,7 +62,7 @@ class AgencySettingsScreen extends StatelessWidget {
                 },
               );
             },
-            tooltip: 'Logout',
+            tooltip: 'Log out',
           ),
         ],
       ),

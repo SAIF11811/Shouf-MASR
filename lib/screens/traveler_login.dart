@@ -132,7 +132,7 @@ class _TravelerLoginState extends State<TravelerLogin> {
                       // Continue button
                       Center(
                         child: CustomElevatedButton(
-                          text: "Login",
+                          text: "Log In",
                           onPressed: () async {
                             await SharedPreferenceHelper.setRememberMe(_rememberMe);
                             Get.offAllNamed('/home');
@@ -163,7 +163,7 @@ class _TravelerLoginState extends State<TravelerLogin> {
                               Get.to(() => const TravelerSignup());
                             },
                             child: const Text(
-                              "Signup",
+                              "Sign Up",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,

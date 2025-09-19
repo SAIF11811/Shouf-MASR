@@ -51,21 +51,21 @@ class TravelerSettingsScreen extends StatelessWidget {
             icon: const Icon(Icons.logout),
             onPressed: () {
               Get.defaultDialog(
-                title: 'Logout',
+                title: 'Log out',
                 middleText: 'Are you sure you want to logout?',
                 textCancel: 'Cancel',
-                textConfirm: 'Logout',
+                textConfirm: 'Log out',
                 confirmTextColor: Colors.white,
                 cancelTextColor: Colors.black,
                 backgroundColor: Colors.white,
                 onCancel: () => Get.back(),
                 onConfirm: () async {
-                  await controller.logout(); // clears remember_me + navigates
+                  await controller.logout();
                   Get.back();
                 },
               );
             },
-            tooltip: 'Logout',
+            tooltip: 'Log out',
           ),
         ],
       ),
