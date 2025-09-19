@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../shared_preference.dart';
 import '../widgets/components.dart';
 import 'traveler_login.dart';
 import 'role_selection.dart';
@@ -16,6 +18,23 @@ class _TravelerSignupState extends State<TravelerSignup> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  bool _rememberMe = false;
+
+  void initState() {
+    super.initState();
+    _loadSavedLogin();
+  }
+
+  void _loadSavedLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? remember = prefs.getBool('remember_me') ?? false;
+
+    if (remember) {
+      setState(() {
+        _rememberMe = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,14 +118,34 @@ class _TravelerSignupState extends State<TravelerSignup> {
                             ? "Passwords do not match"
                             : null,
                       ),
+                      const SizedBox(height: 8),
+
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _rememberMe,
+                            onChanged: (value) {
+                              setState(() {
+                                _rememberMe = value!;
+                              });
+                            },
+                            activeColor: Colors.blue,
+                          ),
+                          const Text(
+                            "Remember me",
+                            style: TextStyle(fontSize: 18.0),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 24),
 
                       // Continue Button
                       Center(
                         child: CustomElevatedButton(
-                          text: "Continue",
-                          onPressed: () {
-                            Get.toNamed('/search');
+                          text: "Signup",
+                          onPressed: () async {
+                            await SharedPreferenceHelper.setRememberMe(_rememberMe);
+                            Get.offAllNamed('/home');
                           },
                           fullWidth: false,
                           backgroundColor: Colors.white,

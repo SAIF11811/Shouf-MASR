@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../shared_preference.dart';
 import '../widgets/bottom_nav.dart';
 
 class SettingsController extends GetxController {
-  RxBool isDarkMode = false.obs;
   RxBool notificationsEnabled = true.obs;
   RxString selectedLanguage = 'English'.obs;
   RxBool backupEnabled = false.obs;
   RxBool locationAccess = true.obs;
 
-  void toggleTheme(bool value) {
-    isDarkMode.value = value;
-    Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+  Future<void> logout() async {
+    await SharedPreferenceHelper.setRememberMe(false);
+    Get.offAllNamed('/role-selection');
   }
 
   void toggleNotifications(bool value) {
@@ -30,9 +30,6 @@ class SettingsController extends GetxController {
     locationAccess.value = value;
   }
 
-  void logout() {
-    Get.offAllNamed('/role-selection');
-  }
 }
 
 class SettingsScreen extends StatelessWidget {
@@ -40,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
 
   final SettingsController controller = Get.put(SettingsController());
 
-  final RxInt currentIndex = 4.obs;
+  final RxInt currentIndex = 5.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +58,9 @@ class SettingsScreen extends StatelessWidget {
                 confirmTextColor: Colors.white,
                 cancelTextColor: Colors.black,
                 backgroundColor: Colors.white,
-                onCancel: () {
-                  Get.back();
-                },
-                onConfirm: () {
-                  controller.logout();
+                onCancel: () => Get.back(),
+                onConfirm: () async {
+                  await controller.logout(); // clears remember_me + navigates
                   Get.back();
                 },
               );

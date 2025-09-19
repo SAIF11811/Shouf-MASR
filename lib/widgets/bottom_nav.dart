@@ -20,6 +20,9 @@ class BottomNav extends StatelessWidget {
         Get.offAllNamed('/messages');
         break;
       case 4:
+        Get.offAllNamed('/notifications');
+        break;
+      case 5:
         Get.offAllNamed('/setting');
         break;
       default:
@@ -35,6 +38,7 @@ class BottomNav extends StatelessWidget {
       {'icon': Icons.local_offer, 'label': 'Offers'},
       {'icon': Icons.search, 'label': 'Search'},
       {'icon': Icons.message, 'label': 'Messages'},
+      {'icon': Icons.notifications, 'label': 'Notifications'},
       {'icon': Icons.settings, 'label': 'Settings'},
     ];
 

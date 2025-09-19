@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shouf_masr/screens/role_selection.dart';
 import 'dart:math';
+import 'package:shouf_masr/shared_preference.dart';
+import 'package:shouf_masr/screens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,13 +29,15 @@ class _SplashScreenState extends State<SplashScreen>
 
     _scaleAnimation = TweenSequence<double>([
       TweenSequenceItem(
-          tween: Tween(begin: 1.0, end: 1.2)
-              .chain(CurveTween(curve: Curves.easeOut)),
-          weight: 40),
+        tween: Tween(begin: 1.0, end: 1.2)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 40,
+      ),
       TweenSequenceItem(
-          tween: Tween(begin: 1.2, end: 1.0)
-              .chain(CurveTween(curve: Curves.easeIn)),
-          weight: 60),
+        tween: Tween(begin: 1.2, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeIn)),
+        weight: 60,
+      ),
     ]).animate(_scaleController);
 
     _circleController = AnimationController(
@@ -40,11 +45,22 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     )..repeat();
 
-    Future.delayed(const Duration(milliseconds: 4000), () {
-      _scaleController.stop();
-      _circleController.stop();
-      Get.offNamed('/role-selection');
-    });
+    _navigateNext();
+  }
+
+  Future<void> _navigateNext() async {
+    await Future.delayed(const Duration(seconds: 5));
+
+    _scaleController.stop();
+    _circleController.stop();
+
+    bool rememberMe = await SharedPreferenceHelper.getRememberMe();
+
+    if (rememberMe) {
+      Get.offAll(() => const HomeScreen());
+    } else {
+      Get.offAll(() => const RoleSelection());
+    }
   }
 
   @override

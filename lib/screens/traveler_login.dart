@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../shared_preference.dart';
 import '../widgets/components.dart';
 import 'traveler_signup.dart';
 import 'role_selection.dart';
@@ -14,6 +16,24 @@ class TravelerLogin extends StatefulWidget {
 class _TravelerLoginState extends State<TravelerLogin> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedLogin();
+  }
+
+  void _loadSavedLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? remember = prefs.getBool('remember_me') ?? false;
+
+    if (remember) {
+      setState(() {
+        _rememberMe = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,14 +109,33 @@ class _TravelerLoginState extends State<TravelerLogin> {
                           ),
                         ),
                       ),
+
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _rememberMe,
+                            onChanged: (value) {
+                              setState(() {
+                                _rememberMe = value!;
+                              });
+                            },
+                            activeColor: Colors.blue,
+                          ),
+                          const Text(
+                            "Remember me",
+                            style: TextStyle(fontSize: 18.0),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 24),
 
                       // Continue button
                       Center(
                         child: CustomElevatedButton(
-                          text: "Continue",
-                          onPressed: () {
-                            Get.toNamed('/search');
+                          text: "Login",
+                          onPressed: () async {
+                            await SharedPreferenceHelper.setRememberMe(_rememberMe);
+                            Get.offAllNamed('/home');
                           },
                           fullWidth: false,
                           backgroundColor: Colors.white,

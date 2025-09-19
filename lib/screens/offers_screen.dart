@@ -22,12 +22,12 @@ class _OffersScreenState extends State<OffersScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFcdcc00),
+      //backgroundColor: const Color(0xFFcdcc00),
       body: Stack(
         children: [
           // Background image
           Opacity(
-            opacity: 0.25,
+            opacity: 1,
             child: Image.network(
               'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/5320a810acd3f7b9e7bf278b1f459970e6fdb712.jpg',
               fit: BoxFit.cover,

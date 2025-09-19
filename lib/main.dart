@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
+import 'package:shouf_masr/screens/splash_screen.dart';
 import 'routes.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(
@@ -24,13 +25,15 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        appBarTheme: AppBarTheme(backgroundColor: const Color(0xFFcdcc00)),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFcdcc00),
+        ),
         scaffoldBackgroundColor: Colors.white,
         primaryColor: const Color(0xFFcdcc00),
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
       getPages: appRoutes,
-      initialRoute: '/',
+      home: const SplashScreen(),
     );
   }
 }
