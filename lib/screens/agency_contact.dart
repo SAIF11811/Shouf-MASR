@@ -148,7 +148,7 @@ class _AgencyContactState extends State<AgencyContact> {
                       CustomElevatedButton(
                         text: "Sign Up",
                         onPressed: () {
-                            Get.toNamed('/agency-action');
+                            Get.toNamed('/requests');
                         },
                         fullWidth: false,
                         backgroundColor: Colors.white,
