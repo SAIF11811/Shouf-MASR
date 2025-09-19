@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../shared_preference.dart';
-import '../widgets/traveler_bottom_nav.dart';
+import '../widgets/agency_bottom_nav.dart';
 
-class SettingsController extends GetxController {
+class AgencySettingsController extends GetxController {
   RxBool notificationsEnabled = true.obs;
   RxString selectedLanguage = 'English'.obs;
   RxBool backupEnabled = false.obs;
@@ -29,23 +29,20 @@ class SettingsController extends GetxController {
   void toggleLocation(bool value) {
     locationAccess.value = value;
   }
-
 }
 
-class SettingsScreen extends StatelessWidget {
-  SettingsScreen({super.key});
+class AgencySettingsScreen extends StatelessWidget {
+  AgencySettingsScreen({super.key});
 
-  final SettingsController controller = Get.put(SettingsController());
+  final AgencySettingsController controller = Get.put(AgencySettingsController());
 
-  final RxInt currentIndex = 4.obs;
+  final RxInt currentIndex = 2.obs;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Settings'),
-        backgroundColor: const Color(0xFFcdcc00),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -60,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
                 backgroundColor: Colors.white,
                 onCancel: () => Get.back(),
                 onConfirm: () async {
-                  await controller.logout(); // clears remember_me + navigates
+                  await controller.logout();
                   Get.back();
                 },
               );
@@ -78,13 +75,13 @@ class SettingsScreen extends StatelessWidget {
             const Text('Profile', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             ListTile(
-              leading: const CircleAvatar(child: Icon(Icons.person)),
-              title: const Text('Sophia Johnson'),
-              subtitle: const Text('sophia@example.com'),
+              leading: const CircleAvatar(child: Icon(Icons.business)),
+              title: const Text('Agency Name'),
+              subtitle: const Text('agency@example.com'),
               trailing: IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  // Navigate to profile edit screen
+                  // Navigate to agency profile edit
                 },
               ),
             ),
@@ -196,7 +193,7 @@ class SettingsScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Obx(() => TravelerBottomNav(currentIndex: currentIndex.value)),
+      bottomNavigationBar: Obx(() => AgencyBottomNav(currentIndex: currentIndex.value)),
     );
   }
 }

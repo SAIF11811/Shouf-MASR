@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:shouf_masr/screens/setting_screen.dart';
+import 'package:shouf_masr/screens/agency_settings_screen.dart';
+import 'package:shouf_masr/screens/traveler_setting_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/role_selection.dart';
 import 'screens/traveler_auth.dart';
@@ -63,17 +64,18 @@ final appRoutes = [
     transition: Transition.rightToLeft,
   ),
   GetPage(name: '/search', page: () => const SearchScreen()),
-  GetPage(name: '/setting', page: () => SettingsScreen()),
+  GetPage(name: '/agency-setting', page: () => AgencySettingsScreen()),
+  GetPage(name: '/traveler-setting', page: () => TravelerSettingsScreen()),
   GetPage(name: '/offers', page: () => const OffersScreen()),
   GetPage(name: '/trip-details', page: () => const TripDetailsScreen()),
   GetPage(name: '/company-profile', page: () => const CompanyProfileScreen()),
-  GetPage(name: '/requests', page: () => const RequestsScreen()),
+  GetPage(name: '/requests', page: () => RequestsScreen()),
   GetPage(name: '/waiting', page: () => const WaitingScreen()),
   GetPage(name: '/home', page: () => const HomeScreen()),
   GetPage(name: '/article', page: () => const ArticleScreen()),
   GetPage(name: '/notifications', page: () => NotificationsScreen()),
   GetPage(name: '/offer-details', page: () => const OfferDetailsScreen()),
   GetPage(name: '/chat', page: () => const ChatScreen()),
-  GetPage(name: '/send-offer', page: () => const SendOfferScreen()),
+  GetPage(name: '/send-offer', page: () => SendOfferScreen()),
   GetPage(name: '/404', page: () => const NotFoundScreen()),
 ];

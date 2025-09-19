@@ -14,7 +14,7 @@ class AgencyBottomNav extends StatelessWidget {
         Get.offAllNamed('/send-offer');
         break;
       case 2:
-        Get.offAllNamed('/setting');
+        Get.offAllNamed('/agency-setting');
         break;
       default:
         Get.offAllNamed('/requests');
@@ -25,7 +25,7 @@ class AgencyBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      {'icon': Icons.document_scanner, 'label': 'Requests'},
+      {'icon': Icons.sticky_note_2, 'label': 'Requests'},
       {'icon': Icons.local_offer, 'label': 'Send Offer'},
       {'icon': Icons.settings, 'label': 'Settings'},
     ];
