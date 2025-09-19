@@ -10,9 +10,8 @@ class RequestsScreen extends StatefulWidget {
   State<RequestsScreen> createState() => _RequestsScreenState();
 }
 
-class _RequestsScreenState extends State<RequestsScreen> with SingleTickerProviderStateMixin {
-  int _tappedIndex = -1;
-
+class _RequestsScreenState extends State<RequestsScreen>
+    with SingleTickerProviderStateMixin {
   final RxInt currentIndex = 0.obs;
 
   final List<Map<String, dynamic>> requests = [
@@ -54,6 +53,36 @@ class _RequestsScreenState extends State<RequestsScreen> with SingleTickerProvid
     },
   ];
 
+  final Map<int, bool> _isSlidingOut = {};
+  final Map<int, bool> _slideRight = {};
+
+  void _handleAction(int index, String action) {
+    final traveler = requests[index]['traveler'];
+
+    setState(() {
+      _isSlidingOut[index] = true;
+      _slideRight[index] = action == "Accepted"; // slide right if accepted
+    });
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (index < requests.length) {
+        setState(() {
+          requests.removeAt(index);
+          _isSlidingOut.remove(index);
+          _slideRight.remove(index);
+        });
+
+        Get.snackbar(
+          action,
+          "$traveler's request ${action.toLowerCase()}",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor:
+          action == "Accepted" ? Colors.green[100] : Colors.red[100],
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +101,8 @@ class _RequestsScreenState extends State<RequestsScreen> with SingleTickerProvid
 
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -83,7 +113,14 @@ class _RequestsScreenState extends State<RequestsScreen> with SingleTickerProvid
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black54,
+                            blurRadius: 6,
+                            offset: Offset(1, 1),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -96,24 +133,29 @@ class _RequestsScreenState extends State<RequestsScreen> with SingleTickerProvid
                       itemCount: requests.length,
                       itemBuilder: (context, i) {
                         final req = requests[i];
-                        return GestureDetector(
-                          onTapDown: (_) => setState(() => _tappedIndex = i),
-                          onTapUp: (_) => setState(() => _tappedIndex = -1),
-                          onTapCancel: () => setState(() => _tappedIndex = -1),
-                          child: AnimatedScale(
-                            scale: _tappedIndex == i ? 0.97 : 1.0,
-                            duration: const Duration(milliseconds: 100),
-                            curve: Curves.easeInOut,
+                        final isSliding = _isSlidingOut[i] ?? false;
+                        final slideRight = _slideRight[i] ?? false;
+
+                        return AnimatedSlide(
+                          offset: isSliding
+                              ? (slideRight
+                              ? const Offset(2, 0)
+                              : const Offset(-2, 0))
+                              : Offset.zero,
+                          duration: const Duration(milliseconds: 300),
+                          child: AnimatedOpacity(
+                            opacity: isSliding ? 0 : 1,
+                            duration: const Duration(milliseconds: 300),
                             child: Container(
                               margin: const EdgeInsets.symmetric(vertical: 8),
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Colors.white.withOpacity(0.85),
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 5,
+                                    color: Colors.black.withOpacity(0.15),
+                                    blurRadius: 6,
                                     offset: const Offset(0, 3),
                                   ),
                                 ],
@@ -132,35 +174,14 @@ class _RequestsScreenState extends State<RequestsScreen> with SingleTickerProvid
                                   Text('Destination: ${req['dest']}'),
                                   Text('Duration: ${req['days']}'),
                                   Text('Budget: ${req['budget']}'),
-                                  const SizedBox(height: 6),
-                                  Row(
-                                    children: List.generate(
-                                      5,
-                                          (j) => Icon(
-                                        j < (req['rating'] as int)
-                                            ? Icons.star
-                                            : Icons.star_border,
-                                        color: j < (req['rating'] as int)
-                                            ? Colors.amber
-                                            : Colors.grey,
-                                        size: 18,
-                                      ),
-                                    ),
-                                  ),
                                   const SizedBox(height: 10),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       CustomElevatedButton(
                                         text: 'Accept',
-                                        onPressed: () {
-                                          Get.snackbar(
-                                            'Accepted',
-                                            '${req['traveler']}\'s request accepted',
-                                            snackPosition: SnackPosition.BOTTOM,
-                                            backgroundColor: Colors.green[100],
-                                          );
-                                        },
+                                        onPressed: () =>
+                                            _handleAction(i, "Accepted"),
                                         backgroundColor: Colors.green,
                                         textColor: Colors.white,
                                         fullWidth: false,
@@ -168,14 +189,8 @@ class _RequestsScreenState extends State<RequestsScreen> with SingleTickerProvid
                                       const SizedBox(width: 8),
                                       CustomElevatedButton(
                                         text: 'Refuse',
-                                        onPressed: () {
-                                          Get.snackbar(
-                                            'Refused',
-                                            '${req['traveler']}\'s request refused',
-                                            snackPosition: SnackPosition.BOTTOM,
-                                            backgroundColor: Colors.red[100],
-                                          );
-                                        },
+                                        onPressed: () =>
+                                            _handleAction(i, "Refused"),
                                         backgroundColor: Colors.red,
                                         textColor: Colors.white,
                                         fullWidth: false,

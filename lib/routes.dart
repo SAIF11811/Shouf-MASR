@@ -20,7 +20,6 @@ import 'screens/notifications_screen.dart';
 import 'screens/offer_details_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/send_offer_screen.dart';
-import 'screens/not_found_screen.dart';
 
 final appRoutes = [
   GetPage(
@@ -77,5 +76,4 @@ final appRoutes = [
   GetPage(name: '/offer-details', page: () => const OfferDetailsScreen()),
   GetPage(name: '/chat', page: () => const ChatScreen()),
   GetPage(name: '/send-offer', page: () => SendOfferScreen()),
-  GetPage(name: '/404', page: () => const NotFoundScreen()),
 ];
