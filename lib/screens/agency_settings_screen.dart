@@ -76,8 +76,8 @@ class AgencySettingsScreen extends StatelessWidget {
             const SizedBox(height: 8),
             ListTile(
               leading: const CircleAvatar(child: Icon(Icons.business)),
-              title: const Text('Agency Name'),
-              subtitle: const Text('agency@example.com'),
+              title: const Text('EgyTrips Agency'),
+              subtitle: const Text('EgyTripsy@example.com'),
               trailing: IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
