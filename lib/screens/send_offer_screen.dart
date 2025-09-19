@@ -191,7 +191,7 @@ class _SendOfferScreenState extends State<SendOfferScreen> {
                             CustomTextField(
                               controller: _destinationController,
                               label: "Destination",
-                              hintText: "Enter specific destination",
+                              hintText: "Enter destination",
                               keyboardType: TextInputType.name,
                               prefixIcon: Icons.location_on,
                               validator: (value) =>
@@ -234,7 +234,7 @@ class _SendOfferScreenState extends State<SendOfferScreen> {
                             CustomTextField(
                               controller: _budgetController,
                               label: "Budget",
-                              hintText: "Enter your budget",
+                              hintText: "Enter cost",
                               keyboardType: TextInputType.number,
                               prefixIcon: Icons.attach_money,
                               validator: (value) =>

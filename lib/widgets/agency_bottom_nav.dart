@@ -25,7 +25,7 @@ class AgencyBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      {'icon': Icons.sticky_note_2, 'label': 'Requests'},
+      {'icon': Icons.assignment, 'label': 'Requests'},
       {'icon': Icons.local_offer, 'label': 'Send Offer'},
       {'icon': Icons.settings, 'label': 'Settings'},
     ];
