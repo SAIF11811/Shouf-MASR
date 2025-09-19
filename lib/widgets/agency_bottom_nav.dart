@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BottomNav extends StatelessWidget {
+class AgencyBottomNav extends StatelessWidget {
   final int currentIndex;
-  const BottomNav({super.key, required this.currentIndex});
+  const AgencyBottomNav({super.key, required this.currentIndex});
 
   void _onItemTapped(int index) {
     switch (index) {

@@ -14,7 +14,7 @@ class NotificationsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Notifications')),
       body: const Center(child: Text('Notifications')),
       bottomNavigationBar: Obx(
-        () => BottomNav(currentIndex: currentIndex.value),
+        () => TravelerBottomNav(currentIndex: currentIndex.value),
       ),
     );
   }

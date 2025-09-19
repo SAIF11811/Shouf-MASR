@@ -196,7 +196,7 @@ class SettingsScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Obx(() => BottomNav(currentIndex: currentIndex.value)),
+      bottomNavigationBar: Obx(() => TravelerBottomNav(currentIndex: currentIndex.value)),
     );
   }
 }

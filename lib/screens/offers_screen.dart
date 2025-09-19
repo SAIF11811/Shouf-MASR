@@ -192,7 +192,7 @@ class _OffersScreenState extends State<OffersScreen> with SingleTickerProviderSt
             left: 0,
             right: 0,
             bottom: 0,
-            child: const BottomNav(currentIndex: 1),
+            child: const TravelerBottomNav(currentIndex: 1),
           ),
         ],
       ),

@@ -277,7 +277,7 @@ class _SearchScreenState extends State<SearchScreen> {
             left: 0,
             right: 0,
             bottom: 0,
-            child: const BottomNav(currentIndex: 2),
+            child: const TravelerBottomNav(currentIndex: 2),
           ),
         ],
       ),

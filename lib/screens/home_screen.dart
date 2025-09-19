@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             left: 0,
             right: 0,
             bottom: 0,
-            child: const BottomNav(currentIndex: 0),
+            child: const TravelerBottomNav(currentIndex: 0),
           ),
         ],
       ),
