@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../shared_preference.dart';
-import '../widgets/bottom_nav.dart';
+import '../widgets/traveler_bottom_nav.dart';
 
 class SettingsController extends GetxController {
   RxBool notificationsEnabled = true.obs;

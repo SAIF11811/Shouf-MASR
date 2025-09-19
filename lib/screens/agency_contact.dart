@@ -142,13 +142,13 @@ class _AgencyContactState extends State<AgencyContact> {
                         iconRight: false,
                       ),
 
-                      const SizedBox(width: 160),
+                      const SizedBox(width: 120),
 
                       // Sign up button
                       CustomElevatedButton(
                         text: "Sign Up",
                         onPressed: () {
-                            Get.toNamed('/requests');
+                            Get.toNamed('/agency-action');
                         },
                         fullWidth: false,
                         backgroundColor: Colors.white,

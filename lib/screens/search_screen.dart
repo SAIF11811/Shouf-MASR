@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../widgets/bottom_nav.dart';
+import '../widgets/traveler_bottom_nav.dart';
 import '../widgets/components.dart';
 
 class SearchScreen extends StatefulWidget {

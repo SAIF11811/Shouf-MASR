@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../widgets/bottom_nav.dart';
+import '../widgets/traveler_bottom_nav.dart';
 import '../widgets/components.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       ),
                     ),
                   ),
-                  const SizedBox(height: 70), // Extra space for nav bar
+                  const SizedBox(height: 70),
                 ],
               ),
             ),
