@@ -10,7 +10,6 @@ import 'screens/agency_signup.dart';
 import 'screens/agency_contact.dart';
 import 'screens/search_screen.dart';
 import 'screens/offers_screen.dart';
-import 'screens/trip_details_screen.dart';
 import 'screens/company_profile.dart';
 import 'screens/requests_screen.dart';
 import 'screens/waiting_screen.dart';
@@ -66,14 +65,13 @@ final appRoutes = [
   GetPage(name: '/agency-setting', page: () => AgencySettingsScreen()),
   GetPage(name: '/traveler-setting', page: () => TravelerSettingsScreen()),
   GetPage(name: '/offers', page: () => const OffersScreen()),
-  GetPage(name: '/trip-details', page: () => const TripDetailsScreen()),
-  GetPage(name: '/company-profile', page: () => const CompanyProfileScreen()),
+  GetPage(name: '/company-profile', page: () => const CompanyProfileScreen(company: {},)),
   GetPage(name: '/requests', page: () => RequestsScreen()),
   GetPage(name: '/waiting', page: () => const WaitingScreen()),
   GetPage(name: '/home', page: () => const HomeScreen()),
-  GetPage(name: '/article', page: () => const ArticleScreen()),
+  GetPage(name: '/article', page: () => const ArticleScreen(article: {},)),
   GetPage(name: '/notifications', page: () => NotificationsScreen()),
-  GetPage(name: '/offer-details', page: () => const OfferDetailsScreen()),
+  GetPage(name: '/offer-details', page: () => const OfferDetailsScreen(article: {},)),
   GetPage(name: '/chat', page: () => const ChatScreen()),
   GetPage(name: '/send-offer', page: () => SendOfferScreen()),
 ];

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shouf_masr/screens/chat_screen.dart';
+import 'package:shouf_masr/screens/offer_details_screen.dart';
 import '../widgets/traveler_bottom_nav.dart';
 import '../widgets/components.dart';
+import 'company_profile.dart';
 
 class OffersScreen extends StatefulWidget {
   const OffersScreen({super.key});
@@ -10,51 +13,141 @@ class OffersScreen extends StatefulWidget {
   State<OffersScreen> createState() => _OffersScreenState();
 }
 
-class _OffersScreenState extends State<OffersScreen> with SingleTickerProviderStateMixin {
+class _OffersScreenState extends State<OffersScreen>
+    with SingleTickerProviderStateMixin {
   int _tappedIndex = -1;
 
-  final List<Map<String, dynamic>> offers = [
-    {'company': 'Eagle Travel', 'dest': 'Luxor - Aswan', 'days': '9-10 days', 'price': '2000 \$', 'rating': 4},
-    {'company': 'EgyTrips', 'dest': 'Luxor - Aswan', 'days': '9-10 days', 'price': '3000 \$', 'rating': 4},
-    {'company': 'WhiteHorse', 'dest': 'Luxor - Aswan', 'days': '9-10 days', 'price': '3000 \$', 'rating': 3},
+  // company data
+  final List<Map<String, dynamic>> articles = [
+    {
+      "image": "https://images.pexels.com/photos/16535883/pexels-photo-16535883.jpeg",
+      "title": "Walking Through the Temples of Luxor",
+      "author": "By Ancient Trails",
+      "days": "3 Days",
+      "price": "\$350",
+      "rating": 4.8,
+      "company": {
+        "name": "Ancient Trails",
+        "description":
+        "Ancient Trails specializes in immersive cultural journeys across Egypt. Our focus is on ancient temples, ruins, and heritage sites. With professional Egyptologists as guides, travelers gain unique insights into Egyptian history and traditions.",
+        "rating": 5,
+        "trips": [
+          "Guided tours of Karnak and Luxor Temples",
+          "Evening light-and-sound show at Karnak",
+          "Visit to the Valley of the Kings and Queens",
+        ],
+        "packages": [
+          "3-day Luxor cultural experience",
+          "7-day heritage-focused Nile Valley package",
+        ],
+        "reviews": [
+          "The guides were incredibly knowledgeable and brought history to life!",
+          "Perfect for history lovers who enjoy detailed explanations.",
+        ],
+      }
+    },
+    {
+      "image": "https://images.pexels.com/photos/5727263/pexels-photo-5727263.jpeg",
+      "title": "A Timeless Journey Sailing the Nile",
+      "author": "By Nile Cruises",
+      "days": "5 Days",
+      "price": "\$1200",
+      "rating": 4.8,
+      "company": {
+        "name": "Nile Cruises",
+        "description":
+        "Nile Cruises offers luxurious voyages along the Nile, combining relaxation with cultural exploration. Guests enjoy 5-star service, onboard entertainment, and excursions to temples and riverside villages.",
+        "rating": 4.9,
+        "trips": [
+          "4-night cruise from Luxor to Aswan",
+          "Sunset sailing with live traditional music",
+          "Exclusive visit to Philae Temple by boat",
+        ],
+        "packages": [
+          "Luxury Nile Cruise with daily excursions",
+          "Romantic 5-day honeymoon package",
+        ],
+        "reviews": [
+          "The cruise was unforgettable – the views were breathtaking!",
+          "Fantastic food, friendly staff, and perfectly organized tours.",
+        ],
+      }
+    },
+    {
+      "image": "https://images.pexels.com/photos/6405483/pexels-photo-6405483.jpeg",
+      "title": "Discovering Peace at Siwa Oasis",
+      "author": "By Desert Explorer",
+      "days": "4 Days",
+      "price": "\$480",
+      "rating": 3.9,
+      "company": {
+        "name": "Desert Explorer",
+        "description":
+        "Desert Explorer curates adventures in Egypt’s deserts, focusing on oases, dunes, and stargazing experiences. We emphasize eco-friendly tourism and authentic interactions with local communities.",
+        "rating": 4,
+        "trips": [
+          "4x4 jeep safari across the Great Sand Sea",
+          "Traditional dinner under the stars at Siwa",
+          "Visit to Cleopatra’s Spring and Siwa salt lakes",
+        ],
+        "packages": [
+          "Weekend desert camping experience",
+          "5-day Sahara expedition with local guides",
+        ],
+        "reviews": [
+          "Loved the desert nights – so peaceful and magical!",
+          "Friendly guides and a very authentic experience, though a bit basic.",
+        ],
+      }
+    },
+    {
+      "image": "https://images.pexels.com/photos/6177483/pexels-photo-6177483.jpeg",
+      "title": "Inside the Egyptian Museum of Cairo",
+      "author": "By Heritage Guide",
+      "days": "2 Days",
+      "price": "\$250",
+      "rating": 4.2,
+      "company": {
+        "name": "Heritage Guide",
+        "description":
+        "Heritage Guide offers expert-led museum tours across Cairo, focusing on Egypt’s heritage and priceless treasures. Tours are designed for both casual visitors and academic researchers.",
+        "rating": 4.5,
+        "trips": [
+          "Half-day tour of the Egyptian Museum",
+          "Special Tutankhamun exhibition visit",
+          "Evening lecture on ancient Egyptian art",
+        ],
+        "packages": [
+          "Private guided museum tour for families",
+          "Full-day Cairo museums and monuments package",
+        ],
+        "reviews": [
+          "Very informative – the guide explained artifacts in an engaging way.",
+          "Perfect for families and history enthusiasts. Highly recommended!",
+        ],
+      }
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: const Color(0xFFcdcc00),
       body: Stack(
         children: [
           // Background image
-          Opacity(
-            opacity: 1,
-            child: Image.network(
-              'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/5320a810acd3f7b9e7bf278b1f459970e6fdb712.jpg',
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            ),
+          Image.network(
+            'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/5320a810acd3f7b9e7bf278b1f459970e6fdb712.jpg',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
           ),
-
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Logo
-                  Center(
-                    child: Image.network(
-                      'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/248cd0554d0da56d81aece5474bbcdfb9f21ec3a.png',
-                      width: 160,
-                      height: 55,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Title
-                  Center(
-                    child: const Text(
+                  const Center(
+                    child: Text(
                       'Offers',
                       style: TextStyle(
                         fontSize: 28,
@@ -71,100 +164,109 @@ class _OffersScreenState extends State<OffersScreen> with SingleTickerProviderSt
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Offers list
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.only(bottom: 80),
-                      itemCount: offers.length,
+                      itemCount: articles.length,
                       itemBuilder: (context, i) {
-                        final offer = offers[i];
+                        final article = articles[i];
                         return GestureDetector(
+                          onTapDown: (_) => setState(() => _tappedIndex = i),
+                          onTapUp: (_) => setState(() => _tappedIndex = -1),
+                          onTapCancel: () => setState(() => _tappedIndex = -1),
                           child: AnimatedScale(
-                            scale: _tappedIndex == i ? 0.95 : 1.0,
-                            duration: const Duration(milliseconds: 100),
-                            curve: Curves.easeInOut,
+                            scale: _tappedIndex == i ? 0.97 : 1.0,
+                            duration: const Duration(milliseconds: 150),
                             child: Container(
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.85),
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 6,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
+                                color: Colors.white.withOpacity(0.9),
+                                borderRadius: BorderRadius.circular(16),
                               ),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                                     child: Image.network(
-                                      'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/44fc690732fc1f3ba960869c7f78e1f5308c058e.jpg',
+                                      article['image'],
                                       width: double.infinity,
-                                      height: 180,
+                                      height: 200,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(12.0),
+                                    padding: const EdgeInsets.all(14.0),
                                     child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          offer['company'],
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600, fontSize: 14),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          'Destinations: ${offer['dest']}',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          'Days/Nights: ${offer['days']}',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          'Price: ${offer['price']}',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        const SizedBox(height: 4),
+                                        Text(article['title'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                        const SizedBox(height: 6),
+                                        Text(article['author'], style: TextStyle(color: Colors.grey[700])),
+                                        const SizedBox(height: 12),
+
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: List.generate(
-                                            5,
-                                                (j) => Icon(
-                                              j < offer['rating'] ? Icons.star : Icons.star_border,
-                                              color: j < offer['rating'] ? Colors.amber : Colors.grey,
-                                              size: 18,
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            // Days
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(Icons.calendar_today, color: Colors.black54),
+                                                const SizedBox(height: 4),
+                                                Text(article['days'] ?? '-', style: const TextStyle(fontSize: 13)),
+                                              ],
                                             ),
-                                          ),
+                                            // Price
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(Icons.attach_money, color: Colors.black54),
+                                                const SizedBox(height: 4),
+                                                Text(article['price'] ?? '-', style: const TextStyle(fontSize: 13)),
+                                              ],
+                                            ),
+                                            // Rating
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(Icons.star, color: Colors.amber),
+                                                const SizedBox(height: 4),
+                                                Text((article['rating'] ?? '-').toString(), style: const TextStyle(fontSize: 13)),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(height: 8),
+
+                                        const SizedBox(height: 12),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
                                             CustomElevatedButton(
                                               text: 'Book Now',
-                                              onPressed: () => Get.toNamed('/trip-details'),
+                                              onPressed: () {
+                                                Get.to(() => OfferDetailsScreen(article: article));
+                                              },
                                               backgroundColor: const Color(0xFFcdcc00),
                                               textColor: Colors.white,
                                               fullWidth: false,
                                             ),
-                                            const SizedBox(width: 8),
                                             CustomElevatedButton(
                                               text: 'Ask',
-                                              onPressed: () => Get.toNamed('/chat'),
+                                              onPressed: () {Get.to(() => ChatScreen());},
                                               backgroundColor: Colors.white,
                                               textColor: Colors.black,
                                               fullWidth: false,
                                             ),
-                                            const SizedBox(width: 8),
                                             CustomElevatedButton(
                                               text: 'Profile',
-                                              onPressed: () => Get.toNamed('/company-profile'),
+                                              onPressed: () {
+                                                final company = article['company'];
+                                                if (company != null) {
+                                                  Get.to(() => CompanyProfileScreen(company: company));
+                                                }
+                                              },
                                               backgroundColor: Colors.white,
                                               textColor: Colors.black,
                                               fullWidth: false,
@@ -173,7 +275,7 @@ class _OffersScreenState extends State<OffersScreen> with SingleTickerProviderSt
                                         ),
                                       ],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -186,13 +288,12 @@ class _OffersScreenState extends State<OffersScreen> with SingleTickerProviderSt
               ),
             ),
           ),
-
-          // Nav bar
-          Positioned(
+          // Bottom Nav
+          const Positioned(
             left: 0,
             right: 0,
             bottom: 0,
-            child: const TravelerBottomNav(currentIndex: 1),
+            child: TravelerBottomNav(currentIndex: 1),
           ),
         ],
       ),

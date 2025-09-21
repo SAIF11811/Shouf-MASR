@@ -11,36 +11,46 @@ class AgencySignup extends StatefulWidget {
 }
 
 class _AgencySignupState extends State<AgencySignup> {
-
+  final _formKey = GlobalKey<FormState>();
   final companyController = TextEditingController();
   final licenseController = TextEditingController();
   final yearController = TextEditingController();
   final sizeController = TextEditingController();
 
+  void _nextStep() {
+    if (_formKey.currentState!.validate()) {
+      Get.toNamed('/agency-contact');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final padding = size.width * 0.05;
+
     return WillPopScope(
-      onWillPop: () async => false, // Disable system back
+      onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: const Color(0xFFcdcc00),
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding),
               child: Column(
                 children: [
-                  // Clickable Logo
+                  // Logo
                   GestureDetector(
-                    onTap: () {
-                      Get.offAll(() => const RoleSelection());
-                    },
-                    child: Image.network(
-                      'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/248cd0554d0da56d81aece5474bbcdfb9f21ec3a.png',
-                      width: 220,
-                      height: 80,
+                    onTap: () => Get.offAll(() => const RoleSelection()),
+                    child: SizedBox(
+                      width: size.width * 0.5,
+                      height: size.height * 0.1,
+                      child: Image.network(
+                        'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/248cd0554d0da56d81aece5474bbcdfb9f21ec3a.png',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: size.height * 0.03),
 
                   const Text(
                     "Company Information",
@@ -50,73 +60,56 @@ class _AgencySignupState extends State<AgencySignup> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: size.height * 0.02),
 
-                  // Company Name
-                  CustomTextField(
-                    controller: companyController,
-                    label: "Company Name",
-                    hintText: "Enter company name",
-                    prefixIcon: Icons.business,
-                    validator: (value) =>
-                    value == null || value.isEmpty
-                        ? "Enter company name"
-                        : null,
-                  ),
-                  const SizedBox(height: 16),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        CustomTextField(
+                          controller: companyController,
+                          label: "Company Name",
+                          hintText: "Enter company name",
+                          prefixIcon: Icons.business,
+                          validator: (val) => val == null || val.isEmpty ? "Enter company name" : null,
+                        ),
+                        SizedBox(height: size.height * 0.02),
+                        CustomTextField(
+                          controller: licenseController,
+                          label: "Commercial License Number",
+                          hintText: "Enter license number",
+                          prefixIcon: Icons.assignment,
+                          validator: (val) => val == null || val.isEmpty ? "Enter license number" : null,
+                        ),
+                        SizedBox(height: size.height * 0.02),
+                        CustomTextField(
+                          controller: yearController,
+                          label: "Year of Establishment",
+                          hintText: "Enter year",
+                          prefixIcon: Icons.calendar_today,
+                          keyboardType: TextInputType.number,
+                          validator: (val) => val == null || val.isEmpty ? "Enter year" : null,
+                        ),
+                        SizedBox(height: size.height * 0.02),
+                        CustomTextField(
+                          controller: sizeController,
+                          label: "Company Size",
+                          hintText: "Enter company size",
+                          prefixIcon: Icons.group,
+                          validator: (val) => val == null || val.isEmpty ? "Enter company size" : null,
+                        ),
+                        SizedBox(height: size.height * 0.04),
 
-                  // License
-                  CustomTextField(
-                    controller: licenseController,
-                    label: "Commercial License Number",
-                    hintText: "Enter license number",
-                    prefixIcon: Icons.assignment,
-                    validator: (value) =>
-                    value == null || value.isEmpty
-                        ? "Enter license number"
-                        : null,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Year
-                  CustomTextField(
-                    controller: yearController,
-                    label: "Year of Establishment",
-                    hintText: "Enter year",
-                    prefixIcon: Icons.calendar_today,
-                    keyboardType: TextInputType.number,
-                    validator: (value) =>
-                    value == null || value.isEmpty
-                        ? "Enter year"
-                        : null,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Size
-                  CustomTextField(
-                    controller: sizeController,
-                    label: "Company Size",
-                    hintText: "Enter company size",
-                    prefixIcon: Icons.group,
-                    validator: (value) =>
-                    value == null || value.isEmpty
-                        ? "Enter company size"
-                        : null,
-                  ),
-                  const SizedBox(height: 30),
-
-                  // Continue Button
-                  Center(
-                    child: CustomElevatedButton(
-                      text: "Next",
-                      onPressed: () {
-                          Get.toNamed('/agency-contact');
-                      },
-                      fullWidth: false,
-                      backgroundColor: Colors.white,
-                      textColor: Colors.black,
-                      icon: Icons.arrow_forward,
-                      iconRight: true,
+                        CustomElevatedButton(
+                          text: "Next",
+                          onPressed: _nextStep,
+                          fullWidth: true,
+                          backgroundColor: Colors.white,
+                          textColor: Colors.black,
+                          icon: Icons.arrow_forward,
+                          iconRight: true,
+                        ),
+                      ],
                     ),
                   ),
                 ],

@@ -1,12 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 import '../widgets/traveler_bottom_nav.dart';
 
 class NotificationsScreen extends StatelessWidget {
   NotificationsScreen({super.key});
 
   final RxInt currentIndex = 3.obs;
+
+  final List<Map<String, String>> notifications = [
+    {
+      "title": "Pharaoh Travels",
+      "message": "Exclusive discount for a Giza Pyramids tour this weekend!",
+      "time": "2m ago"
+    },
+    {
+      "title": "Nile Star Cruises",
+      "message": "Your luxury cruise booking has been confirmed.",
+      "time": "15m ago"
+    },
+    {
+      "title": "Desert Horizon",
+      "message": "Join our safari adventure to the White Desert.",
+      "time": "1h ago"
+    },
+    {
+      "title": "Red Sea Voyages",
+      "message": "Snorkeling and diving packages are now available.",
+      "time": "3h ago"
+    },
+    {
+      "title": "Cairo Heritage Tours",
+      "message": "Don’t miss the new exhibition at the Egyptian Museum.",
+      "time": "Yesterday"
+    },
+    {
+      "title": "Lotus Travel Agency",
+      "message": "Enjoy a guided tour of Luxor and Karnak temples.",
+      "time": "2d ago"
+    },
+    {
+      "title": "Oasis Explorer",
+      "message": "Experience Siwa Oasis with our special package.",
+      "time": "3d ago"
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -29,31 +66,38 @@ class NotificationsScreen extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Container(
               width: double.infinity,
-              margin: const EdgeInsets.only(top: 20),
+              height: MediaQuery.of(context).size.height * 0.55,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
               ),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Notifications',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  const Center(
+                    child: Text(
+                      'Notifications',
+                      style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  _notificationCard(
-                    logoUrl:
-                        'https://images.unsplash.com/photo-1602934445884-da0fa1c9d3b3?q=80&w=958&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                    text: 'Eagle company Sent you an offer',
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: notifications.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final n = notifications[index];
+                        return _notificationCard(
+                          title: n["title"],
+                          message: n["message"],
+                          time: n["time"],
+                          colorIndex: index,
+                        );
+                      },
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  _notificationCard(),
-                  const SizedBox(height: 16),
-                  _notificationCard(),
-                  const SizedBox(height: 16),
-                  _notificationCard(),
                 ],
               ),
             ),
@@ -61,42 +105,83 @@ class NotificationsScreen extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: Obx(
-        () => TravelerBottomNav(currentIndex: currentIndex.value),
+            () => TravelerBottomNav(currentIndex: currentIndex.value),
       ),
     );
   }
 }
 
-Widget _notificationCard({String? logoUrl, String? text}) {
-  return Container(
-    height: 60,
-    decoration: BoxDecoration(
-      color: Colors.grey[200],
-      borderRadius: BorderRadius.circular(16),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.15),
-          blurRadius: 6,
-          offset: const Offset(0, 2),
-        ),
-      ],
-    ),
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Row(
-      children: [
-        if (logoUrl != null)
-          ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: Image.network(
-              logoUrl,
-              width: 40,
-              height: 40,
-              fit: BoxFit.contain,
+Widget _notificationCard({
+  String? title,
+  String? message,
+  String? time,
+  int colorIndex = 0,
+}) {
+  final colors = [
+    Colors.blue,
+    Colors.green,
+    Colors.orange,
+    Colors.red,
+    Colors.purple,
+    Colors.teal,
+  ];
+  final bgColor = colors[colorIndex % colors.length];
+
+  return InkWell(
+    onTap: () {},
+    borderRadius: BorderRadius.circular(16),
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Profile icon
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: bgColor,
+            child: const Icon(Icons.person, color: Colors.white, size: 26),
+          ),
+          const SizedBox(width: 12),
+
+          // Text content
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (title != null)
+                  Text(
+                    title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                if (message != null)
+                  Text(
+                    message,
+                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                  ),
+              ],
             ),
           ),
-        if (logoUrl != null) const SizedBox(width: 12),
-        Expanded(child: Text(text ?? '', style: const TextStyle(fontSize: 15))),
-      ],
+
+          // Time label
+          if (time != null)
+            Text(
+              time,
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            ),
+        ],
+      ),
     ),
   );
 }

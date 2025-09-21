@@ -13,6 +13,8 @@ class AgencyContact extends StatefulWidget {
 }
 
 class _AgencyContactState extends State<AgencyContact> {
+  final _formKey = GlobalKey<FormState>();
+
   final contactName = TextEditingController();
   final password = TextEditingController();
   final position = TextEditingController();
@@ -20,7 +22,6 @@ class _AgencyContactState extends State<AgencyContact> {
   final address = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
-
   File? _tradeLicense;
   File? _companyLogo;
   File? _samplePackage;
@@ -28,41 +29,45 @@ class _AgencyContactState extends State<AgencyContact> {
   Future<void> _pickImage(Function(File) onPicked) async {
     try {
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-      if (pickedFile != null) {
-        setState(() {
-          onPicked(File(pickedFile.path));
-        });
-      }
+      if (pickedFile != null) onPicked(File(pickedFile.path));
     } catch (e) {
       debugPrint("Error picking image: $e");
     }
   }
 
+  void _signup() {
+    if (_formKey.currentState!.validate()) {
+      Get.toNamed('/requests');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final padding = size.width * 0.05;
+
     return WillPopScope(
-      onWillPop: () async => false, // Disable system back
+      onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: const Color(0xFFcdcc00),
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.symmetric(horizontal: padding, vertical: padding),
               child: Column(
                 children: [
-                  // Clickable Logo
                   GestureDetector(
-                    onTap: () {
-                      Get.offAll(() => const RoleSelection());
-                    },
-                    child: Image.network(
-                      'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/248cd0554d0da56d81aece5474bbcdfb9f21ec3a.png',
-                      width: 220,
-                      height: 80,
+                    onTap: () => Get.offAll(() => const RoleSelection()),
+                    child: SizedBox(
+                      width: size.width * 0.5,
+                      height: size.height * 0.1,
+                      child: Image.network(
+                        'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/248cd0554d0da56d81aece5474bbcdfb9f21ec3a.png',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: size.height * 0.03),
 
                   const Text(
                     "Contact Details",
@@ -72,105 +77,59 @@ class _AgencyContactState extends State<AgencyContact> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: size.height * 0.02),
 
-                  // Contact Name
-                  CustomTextField(
-                    controller: contactName,
-                    label: "Contact Person Name",
-                    hintText: "Enter contact name",
-                    prefixIcon: Icons.person,
-                    validator: (value) =>
-                    value == null || value.isEmpty ? "Enter contact name" : null,
-                  ),
-                  const SizedBox(height: 16),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _buildTextField(contactName, "Contact Person Name", "Enter contact name", Icons.person),
+                        SizedBox(height: size.height * 0.02),
+                        _buildTextField(password, "Password", "Enter password", Icons.lock, isPassword: true),
+                        SizedBox(height: size.height * 0.02),
+                        _buildTextField(position, "Position/Role", "Enter position", Icons.work),
+                        SizedBox(height: size.height * 0.02),
+                        _buildTextField(phone, "Phone Number", "Enter phone number", Icons.phone, keyboardType: TextInputType.phone),
+                        SizedBox(height: size.height * 0.02),
+                        _buildTextField(address, "Company Address", "Enter address", Icons.location_on),
+                        SizedBox(height: size.height * 0.03),
 
-                  // Password
-                  CustomTextField(
-                    controller: password,
-                    label: "Password",
-                    hintText: "Enter password",
-                    isPassword: true,
-                    prefixIcon: Icons.lock,
-                    validator: (value) =>
-                    value == null || value.length < 6 ? "Min 6 characters" : null,
-                  ),
-                  const SizedBox(height: 16),
+                        _buildUploadField(size, "Trade License", _tradeLicense, (file) => setState(() => _tradeLicense = file)),
+                        SizedBox(height: size.height * 0.02),
+                        _buildUploadField(size, "Company Logo", _companyLogo, (file) => setState(() => _companyLogo = file)),
+                        SizedBox(height: size.height * 0.02),
+                        _buildUploadField(size, "Sample Package PDF", _samplePackage, (file) => setState(() => _samplePackage = file)),
+                        SizedBox(height: size.height * 0.04),
 
-                  // Position
-                  CustomTextField(
-                    controller: position,
-                    label: "Position/Role",
-                    hintText: "Enter position",
-                    prefixIcon: Icons.work,
-                    validator: (value) =>
-                    value == null || value.isEmpty ? "Enter position" : null,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Phone
-                  CustomTextField(
-                    controller: phone,
-                    label: "Phone Number",
-                    hintText: "Enter phone number",
-                    prefixIcon: Icons.phone,
-                    keyboardType: TextInputType.phone,
-                    validator: (value) =>
-                    value == null || value.isEmpty ? "Enter phone number" : null,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Address
-                  CustomTextField(
-                    controller: address,
-                    label: "Company Address",
-                    hintText: "Enter address",
-                    prefixIcon: Icons.location_on,
-                    validator: (value) =>
-                    value == null || value.isEmpty ? "Enter company address" : null,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // File Uploads
-                  _buildUploadField("Trade License", _tradeLicense,
-                          (file) => _tradeLicense = file),
-                  const SizedBox(height: 16),
-                  _buildUploadField("Company Logo", _companyLogo,
-                          (file) => _companyLogo = file),
-                  const SizedBox(height: 16),
-                  _buildUploadField("Sample Package PDF", _samplePackage,
-                          (file) => _samplePackage = file),
-                  const SizedBox(height: 30),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Back button
-                      CustomElevatedButton(
-                        text: "Back",
-                        onPressed: () => Get.back(),
-                        fullWidth: false,
-                        backgroundColor: Colors.black,
-                        textColor: Colors.white,
-                        icon: Icons.arrow_back,
-                        iconRight: false,
-                      ),
-
-                      const SizedBox(width: 120),
-
-                      // Sign up button
-                      CustomElevatedButton(
-                        text: "Sign Up",
-                        onPressed: () {
-                          Get.toNamed('/requests');
-                        },
-                        fullWidth: false,
-                        backgroundColor: Colors.white,
-                        textColor: Colors.black,
-                        icon: Icons.check,
-                        iconRight: true,
-                      ),
-                    ],
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomElevatedButton(
+                                text: "Back",
+                                onPressed: () => Get.back(),
+                                fullWidth: true,
+                                backgroundColor: Colors.black,
+                                textColor: Colors.white,
+                                icon: Icons.arrow_back,
+                                iconRight: false,
+                              ),
+                            ),
+                            SizedBox(width: size.width * 0.05),
+                            Expanded(
+                              child: CustomElevatedButton(
+                                text: "Sign Up",
+                                onPressed: _signup,
+                                fullWidth: true,
+                                backgroundColor: Colors.white,
+                                textColor: Colors.black,
+                                icon: Icons.check,
+                                iconRight: true,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -181,22 +140,27 @@ class _AgencyContactState extends State<AgencyContact> {
     );
   }
 
-  Widget _buildUploadField(
-      String label, File? selectedFile, Function(File) onPicked) {
+  Widget _buildTextField(TextEditingController controller, String label, String hint, IconData icon,
+      {bool isPassword = false, TextInputType keyboardType = TextInputType.text}) {
+    return CustomTextField(
+      controller: controller,
+      label: label,
+      hintText: hint,
+      prefixIcon: icon,
+      isPassword: isPassword,
+      keyboardType: keyboardType,
+      validator: (val) => val == null || val.isEmpty ? "Enter $label" : null,
+    );
+  }
+
+  Widget _buildUploadField(Size size, String label, File? selectedFile, Function(File) onPicked) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "$label *",
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(height: 8),
+        Text("$label *", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white)),
+        SizedBox(height: size.height * 0.01),
         Container(
-          height: 56,
+          height: size.height * 0.07,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
@@ -206,21 +170,16 @@ class _AgencyContactState extends State<AgencyContact> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Text(
-                  selectedFile != null ? "File selected" : "No file chosen",
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 16,
-                  ),
-                ),
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                child: Text(selectedFile != null ? "File selected" : "No file chosen",
+                    style: const TextStyle(color: Colors.black54, fontSize: 16)),
               ),
               Row(
                 children: [
                   if (selectedFile != null)
                     SizedBox(
-                      height: 40,
-                      width: 40,
+                      height: size.height * 0.06,
+                      width: size.height * 0.06,
                       child: Image.file(selectedFile, fit: BoxFit.cover),
                     ),
                   IconButton(

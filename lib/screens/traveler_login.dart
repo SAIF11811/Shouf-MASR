@@ -14,6 +14,7 @@ class TravelerLogin extends StatefulWidget {
 }
 
 class _TravelerLoginState extends State<TravelerLogin> {
+  final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool _rememberMe = false;
@@ -35,10 +36,17 @@ class _TravelerLoginState extends State<TravelerLogin> {
     }
   }
 
+  void _login() async {
+    if (_formKey.currentState!.validate()) {
+      await SharedPreferenceHelper.setRememberMe(_rememberMe);
+      Get.offAllNamed('/home');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false, // Disable back navigation
+      onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: const Color(0xFFcdcc00),
         body: SafeArea(
@@ -47,11 +55,8 @@ class _TravelerLoginState extends State<TravelerLogin> {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  // Clickable Logo
                   GestureDetector(
-                    onTap: () {
-                      Get.offAll(() => const RoleSelection());
-                    },
+                    onTap: () => Get.offAll(() => const RoleSelection()),
                     child: Image.network(
                       'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/248cd0554d0da56d81aece5474bbcdfb9f21ec3a.png',
                       width: 220,
@@ -60,120 +65,94 @@ class _TravelerLoginState extends State<TravelerLogin> {
                   ),
                   const SizedBox(height: 30),
 
-                  // Form fields
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Email
-                      CustomTextField(
-                        controller: emailController,
-                        label: "Email",
-                        hintText: "Enter email",
-                        prefixIcon: Icons.email,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) =>
-                        value != null && value.contains("@")
-                            ? null
-                            : "Invalid email",
-                      ),
-                      const SizedBox(height: 16),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextField(
+                          controller: emailController,
+                          label: "Email",
+                          hintText: "Enter email",
+                          prefixIcon: Icons.email,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) =>
+                          value != null && value.contains("@")
+                              ? null
+                              : "Invalid email",
+                        ),
+                        const SizedBox(height: 16),
+                        CustomTextField(
+                          controller: passwordController,
+                          label: "Password",
+                          hintText: "Enter password",
+                          isPassword: true,
+                          prefixIcon: Icons.lock,
+                          validator: (value) =>
+                          value != null && value.length >= 6
+                              ? null
+                              : "Min 6 characters",
+                        ),
+                        const SizedBox(height: 12),
 
-                      // Password
-                      CustomTextField(
-                        controller: passwordController,
-                        label: "Password",
-                        hintText: "Enter password",
-                        isPassword: true,
-                        prefixIcon: Icons.lock,
-                        validator: (value) =>
-                        value != null && value.length >= 6
-                            ? null
-                            : "Min 6 characters",
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Forgot password
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {
-                            // TODO: Add forgot password logic
-                          },
-                          child: const Text(
-                            "Forgot password?",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: _rememberMe,
+                              onChanged: (value) {
+                                setState(() {
+                                  _rememberMe = value!;
+                                });
+                              },
+                              activeColor: Colors.blue,
                             ),
+                            const Text(
+                              "Remember me",
+                              style: TextStyle(fontSize: 18.0),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+
+                        Center(
+                          child: CustomElevatedButton(
+                            text: "Log In",
+                            onPressed: _login,
+                            fullWidth: false,
+                            backgroundColor: Colors.white,
+                            textColor: Colors.black,
+                            icon: Icons.arrow_forward,
+                            iconRight: true,
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 20),
 
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: _rememberMe,
-                            onChanged: (value) {
-                              setState(() {
-                                _rememberMe = value!;
-                              });
-                            },
-                            activeColor: Colors.blue,
-                          ),
-                          const Text(
-                            "Remember me",
-                            style: TextStyle(fontSize: 18.0),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Continue button
-                      Center(
-                        child: CustomElevatedButton(
-                          text: "Log In",
-                          onPressed: () async {
-                            await SharedPreferenceHelper.setRememberMe(_rememberMe);
-                            Get.offAllNamed('/home');
-                          },
-                          fullWidth: false,
-                          backgroundColor: Colors.white,
-                          textColor: Colors.black,
-                          icon: Icons.arrow_forward,
-                          iconRight: true,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Don’t have an account? Signup
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Don’t have an account?",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Get.to(() => const TravelerSignup());
-                            },
-                            child: const Text(
-                              "Sign Up",
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Don’t have an account?",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            TextButton(
+                              onPressed: () => Get.to(() => const TravelerSignup()),
+                              child: const Text(
+                                "Sign Up",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
