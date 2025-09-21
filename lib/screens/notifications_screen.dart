@@ -55,8 +55,8 @@ class NotificationsScreen extends StatelessWidget {
             height: double.infinity,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                  'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/5320a810acd3f7b9e7bf278b1f459970e6fdb712.jpg',
+                image: AssetImage(
+                  'assets/images/background.jpg',
                 ),
                 fit: BoxFit.cover,
               ),

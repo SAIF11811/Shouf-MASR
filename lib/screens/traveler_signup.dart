@@ -56,8 +56,8 @@ class _TravelerSignupState extends State<TravelerSignup> {
                 children: [
                   GestureDetector(
                     onTap: () => Get.offAll(() => const RoleSelection()),
-                    child: Image.network(
-                      'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/248cd0554d0da56d81aece5474bbcdfb9f21ec3a.png',
+                    child: Image.asset(
+                      'assets/images/minilogo.png',
                       width: 220,
                       height: 80,
                     ),

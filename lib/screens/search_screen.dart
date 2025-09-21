@@ -69,8 +69,8 @@ class _SearchScreenState extends State<SearchScreen> {
           // Background image
           Opacity(
             opacity: 0.25,
-            child: Image.network(
-              'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/5320a810acd3f7b9e7bf278b1f459970e6fdb712.jpg',
+            child: Image.asset(
+              'assets/images/background.jpg',
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
@@ -84,8 +84,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 children: [
                   // Logo
                   Center(
-                    child: Image.network(
-                      'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/248cd0554d0da56d81aece5474bbcdfb9f21ec3a.png',
+                    child: Image.asset(
+                      'assets/images/minilogo.png',
                       width: 160,
                       height: 55,
                     ),

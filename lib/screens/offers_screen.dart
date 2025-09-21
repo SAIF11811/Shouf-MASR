@@ -20,7 +20,7 @@ class _OffersScreenState extends State<OffersScreen>
   // company data
   final List<Map<String, dynamic>> articles = [
     {
-      "image": "https://images.pexels.com/photos/16535883/pexels-photo-16535883.jpeg",
+      "image": "assets/images/2.jpeg",
       "title": "Walking Through the Temples of Luxor",
       "author": "By Ancient Trails",
       "days": "3 Days",
@@ -47,7 +47,7 @@ class _OffersScreenState extends State<OffersScreen>
       }
     },
     {
-      "image": "https://images.pexels.com/photos/5727263/pexels-photo-5727263.jpeg",
+      "image": "assets/images/3.jpeg",
       "title": "A Timeless Journey Sailing the Nile",
       "author": "By Nile Cruises",
       "days": "5 Days",
@@ -74,7 +74,7 @@ class _OffersScreenState extends State<OffersScreen>
       }
     },
     {
-      "image": "https://images.pexels.com/photos/6405483/pexels-photo-6405483.jpeg",
+      "image": "assets/images/4.jpeg",
       "title": "Discovering Peace at Siwa Oasis",
       "author": "By Desert Explorer",
       "days": "4 Days",
@@ -101,7 +101,7 @@ class _OffersScreenState extends State<OffersScreen>
       }
     },
     {
-      "image": "https://images.pexels.com/photos/6177483/pexels-photo-6177483.jpeg",
+      "image": "assets/images/6.jpeg",
       "title": "Inside the Egyptian Museum of Cairo",
       "author": "By Heritage Guide",
       "days": "2 Days",
@@ -129,14 +129,15 @@ class _OffersScreenState extends State<OffersScreen>
     },
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
           // Background image
-          Image.network(
-            'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/5320a810acd3f7b9e7bf278b1f459970e6fdb712.jpg',
+          Image.asset(
+            'assets/images/background.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -188,12 +189,12 @@ class _OffersScreenState extends State<OffersScreen>
                                 children: [
                                   ClipRRect(
                                     borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                                    child: Image.network(
+                                    child: Image.asset(
                                       article['image'],
                                       width: double.infinity,
                                       height: 200,
                                       fit: BoxFit.cover,
-                                    ),
+                                    )
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(14.0),

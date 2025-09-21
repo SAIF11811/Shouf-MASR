@@ -28,15 +28,12 @@ class ArticleScreen extends StatelessWidget {
                     bottomLeft: Radius.circular(24),
                     bottomRight: Radius.circular(24),
                   ),
-                  child: Image.network(
+                  child: Image.asset(
                     article["image"]!,
                     height: 400,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
-                    const Icon(Icons.broken_image,
-                        size: 80, color: Colors.grey),
-                  ),
+                  )
                 ),
                 Positioned(
                   bottom: 16,

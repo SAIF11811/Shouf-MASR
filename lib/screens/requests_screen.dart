@@ -91,8 +91,8 @@ class _RequestsScreenState extends State<RequestsScreen>
           // Background
           Opacity(
             opacity: 1,
-            child: Image.network(
-              'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/5320a810acd3f7b9e7bf278b1f459970e6fdb712.jpg',
+            child: Image.asset(
+              'assets/images/background.jpg',
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,

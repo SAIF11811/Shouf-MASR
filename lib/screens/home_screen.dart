@@ -16,32 +16,32 @@ class _HomeScreenState extends State<HomeScreen>
 
   final List<Map<String, String>> articles = [
     {
-      "image": "https://images.pexels.com/photos/32902076/pexels-photo-32902076.jpeg",
+      "image": "assets/images/1.jpeg",
       "title": "Unveiling the Mysteries of the Pyramids",
       "author": "By Eagle Travel",
     },
     {
-      "image": "https://images.pexels.com/photos/16535883/pexels-photo-16535883.jpeg",
+      "image": "assets/images/2.jpeg",
       "title": "Walking Through the Temples of Luxor",
       "author": "By Ancient Trails",
     },
     {
-      "image": "https://images.pexels.com/photos/5727263/pexels-photo-5727263.jpeg",
+      "image": "assets/images/3.jpeg",
       "title": "A Timeless Journey Sailing the Nile",
       "author": "By Nile Cruises",
     },
     {
-      "image": "https://images.pexels.com/photos/6405483/pexels-photo-6405483.jpeg",
+      "image": "assets/images/4.jpeg",
       "title": "Discovering Peace at Siwa Oasis",
       "author": "By Desert Explorer",
     },
     {
-      "image": "https://images.pexels.com/photos/3390587/pexels-photo-3390587.jpeg",
+      "image": "assets/images/5.jpeg",
       "title": "Exploring the Underwater Wonders of the Red Sea",
       "author": "By Ocean Explorer",
     },
     {
-      "image": "https://images.pexels.com/photos/6177483/pexels-photo-6177483.jpeg",
+      "image": "assets/images/6.jpeg",
       "title": "Inside the Egyptian Museum of Cairo",
       "author": "By Heritage Guide",
     },
@@ -56,8 +56,8 @@ class _HomeScreenState extends State<HomeScreen>
           // Background image
           Opacity(
             opacity: 0.25,
-            child: Image.network(
-              'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/5320a810acd3f7b9e7bf278b1f459970e6fdb712.jpg',
+            child: Image.asset(
+              'assets/images/background.jpg',
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
@@ -71,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen>
                 children: [
                   // Logo
                   Center(
-                    child: Image.network(
-                      'https://cdn-ai.onspace.ai/onspace/figma/ZC9x4trmvyQe3EwsqDQBdR/248cd0554d0da56d81aece5474bbcdfb9f21ec3a.png',
+                    child: Image.asset(
+                      'assets/images/minilogo.png',
                       width: 160,
                       height: 55,
                     ),
@@ -94,14 +94,14 @@ class _HomeScreenState extends State<HomeScreen>
                             text: const TextSpan(
                               children: [
                                 TextSpan(
-                                  text: 'Hello ',
+                                  text: 'Hello in ',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 22,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 TextSpan(
-                                  text: 'Sophia!',
+                                  text: 'Shouf MASR!',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 22,
@@ -183,14 +183,11 @@ class _HomeScreenState extends State<HomeScreen>
               Expanded(
                 child: ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.network(
+                  child: Image.asset(
                     article["image"]!,
                     fit: BoxFit.cover,
                     width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.broken_image, size: 50, color: Colors.grey);
-                    },
-                  ),
+                  )
                 ),
               ),
               const SizedBox(height: 8),

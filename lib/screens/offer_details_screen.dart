@@ -43,13 +43,12 @@ class OfferDetailsScreen extends StatelessWidget {
             // Offer Image
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.network(
-                article['image'] ??
-                    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+              child: Image.asset(
+                article['image'] ?? 'assets/images/image_not_found.png',
                 width: double.infinity,
                 height: 220,
                 fit: BoxFit.cover,
-              ),
+              )
             ),
             const SizedBox(height: 16),
 
