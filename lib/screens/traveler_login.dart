@@ -76,10 +76,17 @@ class _TravelerLoginState extends State<TravelerLogin> {
                           hintText: "Enter email",
                           prefixIcon: Icons.email,
                           keyboardType: TextInputType.emailAddress,
-                          validator: (value) =>
-                          value != null && value.contains("@")
-                              ? null
-                              : "Invalid email",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Email required";
+                            }
+                            // Simple regex to check email pattern
+                            final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                            if (!emailRegex.hasMatch(value)) {
+                              return "Invalid email";
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 16),
                         CustomTextField(

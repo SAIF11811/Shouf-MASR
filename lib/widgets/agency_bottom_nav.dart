@@ -8,7 +8,7 @@ class AgencyBottomNav extends StatelessWidget {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        Get.offAllNamed('/requests');
+        Get.offAllNamed('/agency_notifications');
         break;
       case 1:
         Get.offAllNamed('/send-offer');
@@ -17,7 +17,7 @@ class AgencyBottomNav extends StatelessWidget {
         Get.offAllNamed('/agency-setting');
         break;
       default:
-        Get.offAllNamed('/requests');
+        Get.offAllNamed('/agency_notifications');
         break;
     }
   }
@@ -25,7 +25,7 @@ class AgencyBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      {'icon': Icons.assignment, 'label': 'Requests'},
+      {'icon': Icons.notifications, 'label': 'Notifications'},
       {'icon': Icons.local_offer, 'label': 'Send Offer'},
       {'icon': Icons.settings, 'label': 'Settings'},
     ];

@@ -48,7 +48,7 @@ class RoleSelection extends StatelessWidget {
                 const SizedBox(width: 20),
                 CustomElevatedButton(
                   text: "Agency",
-                  onPressed: () => Get.toNamed('/agency-signup'),
+                  onPressed: () => Get.toNamed('/agency-auth'),
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
                   fullWidth: false,

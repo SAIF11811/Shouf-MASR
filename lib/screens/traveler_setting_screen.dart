@@ -79,14 +79,8 @@ class TravelerSettingsScreen extends StatelessWidget {
             const SizedBox(height: 8),
             ListTile(
               leading: const CircleAvatar(child: Icon(Icons.person)),
-              title: const Text('Sophia Johnson'),
-              subtitle: const Text('sophia@example.com'),
-              trailing: IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  // Navigate to profile edit screen
-                },
-              ),
+              title: const Text('Ahmed Mohamed'),
+              subtitle: const Text('ahmed@gmail.com'),
             ),
             const Divider(height: 32),
 

@@ -1,4 +1,7 @@
 import 'package:get/get.dart';
+import 'package:shouf_masr/screens/agency_auth.dart';
+import 'package:shouf_masr/screens/agency_login.dart';
+import 'package:shouf_masr/screens/agency_notifications_screen.dart';
 import 'package:shouf_masr/screens/agency_settings_screen.dart';
 import 'package:shouf_masr/screens/traveler_setting_screen.dart';
 import 'screens/splash_screen.dart';
@@ -11,11 +14,10 @@ import 'screens/agency_contact.dart';
 import 'screens/search_screen.dart';
 import 'screens/offers_screen.dart';
 import 'screens/company_profile.dart';
-import 'screens/requests_screen.dart';
 import 'screens/waiting_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/article_screen.dart';
-import 'screens/notifications_screen.dart';
+import 'screens/traveler_notifications_screen.dart';
 import 'screens/offer_details_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/send_offer_screen.dart';
@@ -36,6 +38,12 @@ final appRoutes = [
   GetPage(
     name: '/traveler-auth',
     page: () => const TravelerAuth(),
+    transition: Transition.rightToLeft,
+    transitionDuration: const Duration(milliseconds: 500),
+  ),
+  GetPage(
+    name: '/agency-auth',
+    page: () => const AgencyAuth(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 500),
   ),
@@ -61,17 +69,23 @@ final appRoutes = [
     page: () => const AgencyContact(),
     transition: Transition.rightToLeft,
   ),
+  GetPage(
+    name: '/agency-login',
+    page: () => const AgencyLogin(),
+    transition: Transition.rightToLeft,
+  ),
   GetPage(name: '/search', page: () => const SearchScreen()),
   GetPage(name: '/agency-setting', page: () => AgencySettingsScreen()),
   GetPage(name: '/traveler-setting', page: () => TravelerSettingsScreen()),
   GetPage(name: '/offers', page: () => const OffersScreen()),
   GetPage(name: '/company-profile', page: () => const CompanyProfileScreen(company: {},)),
-  GetPage(name: '/requests', page: () => RequestsScreen()),
   GetPage(name: '/waiting', page: () => const WaitingScreen()),
   GetPage(name: '/home', page: () => const HomeScreen()),
   GetPage(name: '/article', page: () => const ArticleScreen(article: {},)),
-  GetPage(name: '/notifications', page: () => NotificationsScreen()),
+  GetPage(name: '/traveler_notifications', page: () => TravelerNotificationsScreen()),
+  GetPage(name: '/agency_notifications', page: () => AgencyNotificationsScreen()),
   GetPage(name: '/offer-details', page: () => const OfferDetailsScreen(article: {},)),
   GetPage(name: '/chat', page: () => const ChatScreen()),
   GetPage(name: '/send-offer', page: () => SendOfferScreen()),
+  GetPage(name: '/wait', page: () => WaitingScreen()),
 ];

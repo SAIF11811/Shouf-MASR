@@ -37,7 +37,7 @@ class _AgencyContactState extends State<AgencyContact> {
 
   void _signup() {
     if (_formKey.currentState!.validate()) {
-      Get.toNamed('/requests');
+      Get.toNamed('/wait');
     }
   }
 

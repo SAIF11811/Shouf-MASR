@@ -17,7 +17,7 @@ class TravelerBottomNav extends StatelessWidget {
         Get.offAllNamed('/search');
         break;
       case 3:
-        Get.offAllNamed('/notifications');
+        Get.offAllNamed('/traveler_notifications');
         break;
       case 4:
         Get.offAllNamed('/traveler-setting');

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shouf_masr/screens/available_offers_screen.dart';
 import '../widgets/traveler_bottom_nav.dart';
 import '../widgets/components.dart';
 
@@ -76,7 +77,6 @@ class _SearchScreenState extends State<SearchScreen> {
               height: double.infinity,
             ),
           ),
-
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -94,7 +94,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.only(bottom: 80), // space for nav bar
+                      padding: const EdgeInsets.only(bottom: 80),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -152,12 +152,10 @@ class _SearchScreenState extends State<SearchScreen> {
                             ],
                           ),
                           const SizedBox(height: 8),
-                          CustomTextField(
+
+                          // Destination with recommendations
+                          DestinationTextField(
                             controller: _destinationController,
-                            label: "Destination",
-                            hintText: "Enter specific destination",
-                            keyboardType: TextInputType.name,
-                            prefixIcon: Icons.location_on,
                             enabled: _isSpecificDestination,
                           ),
                           const SizedBox(height: 20),
@@ -251,11 +249,19 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                           const SizedBox(height: 20),
 
-                          // offers button
+                          // Offers button
                           Center(
                             child: CustomElevatedButton(
                               text: "Show Travel Offers",
-                              onPressed: () => Get.toNamed('/offers'),
+                              onPressed: () {
+                                Get.to(() => AvailableOffersScreen(
+                                  destination: _isSpecificDestination ? _destinationController.text : "Open",
+                                  adults: _adultController.text,
+                                  children: _childController.text,
+                                  dates: _dateController.text,
+                                  budget: _isSpecificBudget ? _budgetController.text : "Open",
+                                ));
+                              },
                               fullWidth: true,
                               backgroundColor: const Color(0xFFcdcc00),
                               textColor: Colors.white,
@@ -272,7 +278,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
 
-          // bottom nav
+          // Bottom nav
           Positioned(
             left: 0,
             right: 0,
@@ -304,6 +310,178 @@ class _SectionTitle extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
+      ],
+    );
+  }
+}
+
+// Custom destination field with recommendations
+class DestinationTextField extends StatefulWidget {
+  final TextEditingController controller;
+  final bool enabled;
+  const DestinationTextField({required this.controller, required this.enabled, Key? key}) : super(key: key);
+
+  @override
+  State<DestinationTextField> createState() => _DestinationTextFieldState();
+}
+
+class _DestinationTextFieldState extends State<DestinationTextField> {
+  final FocusNode _focusNode = FocusNode();
+  final List<String> allDestinations = [
+    "Cairo",
+    "Luxor",
+    "Aswan",
+    "Sharm El-Sheikh",
+    "Hurghada",
+    "Alexandria",
+    "Giza",
+    "Siwa Oasis",
+    "Dahab",
+    "Marsa Alam",
+    "Fayoum Oasis",
+    "Abu Simbel",
+    "Port Said",
+    "Taba",
+    "Nuweiba",
+    "Ismailia",
+    "Ras Sudr",
+    "Minya",
+    "Beni Suef",
+    "Sohag",
+    "Qena",
+    "Kom Ombo",
+    "Damietta",
+    "Mansoura",
+    "Zagazig",
+    "Suez",
+    "Al Arish",
+    "Sinai",
+    "El Alamein",
+    "Marsa Matruh",
+    "Alamein",
+    "Banha",
+    "Qalyub",
+    "Dakhla Oasis",
+    "Kharga Oasis",
+    "Fayoum",
+    "Safaga",
+    "Quseir",
+    "Sinai",
+    "Ismailia",
+    "Ras Sudr",
+    "Minya",
+    "Beni Suef",
+    "Sohag",
+    "Marsa Matrouh",
+    "Alamein",
+    "Damietta",
+    "Zagazig",
+    "Suez",
+    "Mansoura",
+  ];
+  List<String> filteredDestinations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus && widget.enabled) {
+        setState(() {
+          filteredDestinations = allDestinations;
+        });
+      } else {
+        setState(() {
+          filteredDestinations = [];
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: TextFormField(
+            controller: widget.controller,
+            focusNode: _focusNode,
+            enabled: widget.enabled,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: widget.enabled ? Colors.black87 : Colors.grey.shade500,
+            ),
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.location_on,
+                  color: widget.enabled ? Colors.grey.shade700 : Colors.grey.shade400),
+              hintText: "Enter specific destination",
+              filled: true,
+              fillColor: widget.enabled ? Colors.grey.shade50 : Colors.grey.shade200,
+              contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                  width: 2,
+                ),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+            ),
+            onChanged: (value) {
+              setState(() {
+                filteredDestinations = allDestinations
+                    .where((d) => d.toLowerCase().contains(value.toLowerCase()))
+                    .toList();
+              });
+            },
+          ),
+        ),
+
+        // Suggestions dropdown
+        if (filteredDestinations.isNotEmpty)
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade300,
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
+                )
+              ],
+            ),
+            constraints: const BoxConstraints(maxHeight: 200),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: filteredDestinations.length,
+              itemBuilder: (context, index) {
+                final destination = filteredDestinations[index];
+                return ListTile(
+                  title: Text(destination),
+                  onTap: () {
+                    widget.controller.text = destination;
+                    _focusNode.unfocus();
+                  },
+                );
+              },
+            ),
+          ),
       ],
     );
   }
