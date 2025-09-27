@@ -1,4 +1,5 @@
  import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AvailableOffersScreen extends StatefulWidget {
   final String destination;
@@ -932,8 +933,14 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                               MaterialButton(
                                 color: const Color(0xFFcdcc00),
                                 minWidth: 120,
-                                onPressed: () {},
-                                shape: RoundedRectangleBorder(
+                                onPressed: () async {
+                                  const url = 'https://www.pyramid-of-giza.com/tours/?ci=1&cm=22692823616_178125126421_c_g_egyptian%20pyramid%20tours_p_&gad_source=1&gad_campaignid=22692823616&gbraid=0AAAAACRC4b0mPfIwiT086U1-HakHmrF2e&gclid=EAIaIQobChMIlfWRzu_3jwMV66KDBx2KuivYEAAYAiAAEgLi-PD_BwE';
+                                  if (await canLaunchUrl(Uri.parse(url))) {
+                                    await launchUrl(Uri.parse(url));
+                                  } else {
+                                    throw 'Could not launch $url';
+                                  }
+                                },                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: const Text(

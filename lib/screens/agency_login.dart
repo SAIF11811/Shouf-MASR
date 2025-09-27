@@ -45,7 +45,7 @@ class _AgencyLoginState extends State<AgencyLogin> {
       final password = passwordController.text.trim();
 
       if (company == "EgyTrips" &&
-          email == "EgyTrips@gmail.com" &&
+          email == "egytrips@gmail.com" &&
           password == "egy123") {
         await SharedPreferenceHelper.setRememberMe(_rememberMe);
         Get.offAll(() => AgencyNotificationsScreen());
