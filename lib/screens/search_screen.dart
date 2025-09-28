@@ -13,6 +13,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final TextEditingController _homeController = TextEditingController();
   final TextEditingController _adultController = TextEditingController();
   final TextEditingController _childController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -122,6 +123,22 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           const SizedBox(height: 25),
+
+                          // Your location
+                          const _SectionTitle(
+                            icon: Icons.home,
+                            title: 'Your Location',
+                          ),
+                          const SizedBox(height: 8),
+
+                          CustomTextField(
+                            controller: _homeController,
+                            label: "Your Location",
+                            hintText: "Enter your location",
+                            keyboardType: TextInputType.text,
+                            prefixIcon: Icons.home,
+                          ),
+                          const SizedBox(height: 20),
 
                           // Destination
                           const _SectionTitle(
@@ -280,6 +297,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               onPressed: () {
                                 Get.to(
                                   () => AvailableOffersScreen(
+                                    home: _homeController.text,
                                     destination: _isSpecificDestination
                                         ? _destinationController.text
                                         : "Open",

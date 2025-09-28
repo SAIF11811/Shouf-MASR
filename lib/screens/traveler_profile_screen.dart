@@ -251,7 +251,7 @@ class TravelerSettingsScreen extends StatelessWidget {
             const ListTile(
               leading: Icon(Icons.info),
               title: Text('App Version'),
-              subtitle: Text('v1.0.0'),
+              subtitle: Text('v3.0.0'),
             ),
             ListTile(
               leading: const Icon(Icons.description),

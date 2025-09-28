@@ -210,24 +210,25 @@ class OfferDetailsScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFcdcc00),
                   foregroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 14,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 onPressed: () async {
-                  const url = 'https://www.pyramid-of-giza.com/tours/?ci=1&cm=22692823616_178125126421_c_g_egyptian%20pyramid%20tours_p_&gad_source=1&gad_campaignid=22692823616&gbraid=0AAAAACRC4b0mPfIwiT086U1-HakHmrF2e&gclid=EAIaIQobChMIlfWRzu_3jwMV66KDBx2KuivYEAAYAiAAEgLi-PD_BwE';
-                  if (await canLaunchUrl(Uri.parse(url))) {
-                    await launchUrl(Uri.parse(url));
-                  } else {
-                    throw 'Could not launch $url';
+                  final Uri url = Uri.parse(
+                    'https://www.pyramid-of-giza.com/tours/?ci=1&cm=22692823616_178125126421_c_g_egyptian%20pyramid%20tours_p_&gad_source=1&gad_campaignid=22692823616&gbraid=0AAAAACRC4b0mPfIwiT086U1-HakHmrF2e&gclid=EAIaIQobChMIlfWRzu_3jwMV66KDBx2KuivYEAAYAiAAEgLi-PD_BwE',
+                  );
+
+                  if (!await launchUrl(
+                    url,
+                    mode: LaunchMode.externalApplication,
+                  )) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Could not launch the booking URL')),
+                    );
                   }
                 },
-                child: const Text('Book Now', style: TextStyle(fontSize: 16)),
-              ),
+                child: const Text('Book Now', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16)),
+              )
             ),
           ],
         ),

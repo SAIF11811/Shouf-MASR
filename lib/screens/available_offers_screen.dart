@@ -1,7 +1,8 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AvailableOffersScreen extends StatefulWidget {
+  final String home;
   final String destination;
   final String adults;
   final String children;
@@ -10,6 +11,7 @@ class AvailableOffersScreen extends StatefulWidget {
 
   const AvailableOffersScreen({
     super.key,
+    required this.home,
     required this.destination,
     required this.adults,
     required this.children,
@@ -35,7 +37,7 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
       duration: const Duration(milliseconds: 800),
     );
 
-    // Simulate loading delay
+    // loading delay
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         _isLoading = false;
@@ -664,63 +666,75 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
     {"title": "Qalyub", "desc": "8 Days", "price": "\$1080", "members": "6"},
     {"title": "Qalyub", "desc": "10 Days", "price": "\$1400", "members": "4"},
   ];
+
   @override
   Widget build(BuildContext context) {
     int? enteredBudget = int.tryParse(widget.budget);
-    int totalTravelers =
-        (int.tryParse(widget.adults) ?? 0) + (int.tryParse(widget.children) ?? 0);
 
-    // Apply filters
+    int _calculateSelectedDays(String dateRange) {
+      try {
+        final parts = dateRange.split(" - ");
+        if (parts.length != 2) return 0;
+
+        DateTime parseDate(String s) {
+          final dateRegex = RegExp(r'(\d{1,2})/(\d{1,2})/(\d{4})');
+          final match = dateRegex.firstMatch(s.trim());
+          if (match != null) {
+            return DateTime(
+              int.parse(match.group(3)!),
+              int.parse(match.group(2)!),
+              int.parse(match.group(1)!),
+            );
+          }
+          throw FormatException();
+        }
+
+        final start = parseDate(parts[0]);
+        final end = parseDate(parts[1]);
+        return end.difference(start).inDays + 1;
+      } catch (_) {
+        return 0;
+      }
+    }
+
+    bool _matchOfferDays(String offerDesc, int selectedDays) {
+      final numbers = RegExp(r'\d+').allMatches(offerDesc).map((m) => int.parse(m.group(0)!)).toList();
+      if (numbers.isEmpty) return true;
+
+      final minDays = numbers.reduce((a, b) => a < b ? a : b);
+      final maxDays = numbers.reduce((a, b) => a > b ? a : b);
+
+      return selectedDays >= minDays && selectedDays <= maxDays;
+    }
+
     final filteredOffers = offers.where((offer) {
-      // Parse price
       final price = int.tryParse(
-        offer["price"].toString().replaceAll(RegExp(r'[^0-9]'), ""),
-      ) ??
-          0;
+          offer["price"].toString().replaceAll(RegExp(r'[^0-9]'), "")
+      ) ?? 0;
 
       final title = offer["title"].toString().toLowerCase();
+      final selectedDays = _calculateSelectedDays(widget.dates);
 
-      // Destination filter
+      // Destination match
       if (widget.destination.isNotEmpty &&
           widget.destination.toLowerCase() != "open" &&
           !title.contains(widget.destination.toLowerCase())) {
         return false;
       }
 
-      // Budget filter
-      if (enteredBudget != null && price > enteredBudget) {
+      // Budget match
+      if (enteredBudget != null && enteredBudget > 0 && price > enteredBudget) {
         return false;
       }
 
-      // Members filter
-      final membersAvailable =
-          int.tryParse(offer["members"].toString().split(" ").first) ?? 0;
-      if (totalTravelers > 0 && totalTravelers > membersAvailable) {
+      // Days match
+      if (selectedDays > 0 && !_matchOfferDays(offer["desc"].toString(), selectedDays)) {
         return false;
-      }
-
-      // Date filter
-      if (widget.dates.isNotEmpty) {
-        try {
-          final datesParts = widget.dates.split("to").map((e) => e.trim()).toList();
-          if (datesParts.length == 2) {
-            final startDate = DateTime.parse(datesParts[0]);
-            final endDate = DateTime.parse(datesParts[1]);
-
-            final offerDate = DateTime.tryParse(offer["startDate"] ?? "") ??
-                DateTime.now();
-
-            if (offerDate.isBefore(startDate) || offerDate.isAfter(endDate)) {
-              return false;
-            }
-          }
-        } catch (_) {
-          return false;
-        }
       }
 
       return true;
     }).toList();
+
 
     return Scaffold(
       appBar: AppBar(
@@ -749,7 +763,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.travel_explore, color: Colors.orange, size: 28),
+                        Icon(Icons.travel_explore,
+                            color: Colors.orange, size: 28),
                         const SizedBox(width: 8),
                         Text(
                           "Your Travel Plan",
@@ -761,18 +776,39 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                         ),
                       ],
                     ),
-                    const Divider(height: 20, thickness: 1.2, color: Colors.grey),
+                    const Divider(
+                        height: 20, thickness: 1.2, color: Colors.grey),
                     Row(
                       children: [
-                        const Icon(Icons.location_on, color: Colors.redAccent),
+                        const Icon(Icons.home,
+                            color: Colors.indigoAccent),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            widget.home.isEmpty
+                                ? "Not Determined"
+                                : widget.destination,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on,
+                            color: Colors.redAccent),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             widget.destination.isEmpty
                                 ? "All Destinations"
                                 : widget.destination,
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
                       ],
@@ -784,7 +820,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                         const SizedBox(width: 8),
                         Text(
                           "${widget.adults} Adults, ${widget.children} Children",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -795,7 +832,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                         const SizedBox(width: 8),
                         Text(
                           widget.dates,
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -806,7 +844,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                         const SizedBox(width: 8),
                         Text(
                           widget.budget,
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -815,8 +854,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
               ),
             ),
             const SizedBox(height: 20),
-            Center(
-              child: const Text(
+            const Center(
+              child: Text(
                 "Available Offers",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
@@ -827,7 +866,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                   ? const Center(
                 child: Text(
                   "No offers found for your criteria.",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style:
+                  TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               )
                   : ListView.builder(
@@ -854,18 +894,24 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                   return SlideTransition(
                     position: animation,
                     child: GestureDetector(
-                      onTapDown: (_) => setState(() => _tappedIndex = i),
-                      onTapUp: (_) => setState(() => _tappedIndex = -1),
-                      onTapCancel: () => setState(() => _tappedIndex = -1),
+                      onTapDown: (_) =>
+                          setState(() => _tappedIndex = i),
+                      onTapUp: (_) =>
+                          setState(() => _tappedIndex = -1),
+                      onTapCancel: () =>
+                          setState(() => _tappedIndex = -1),
                       child: AnimatedScale(
-                        scale: _tappedIndex == i ? 0.97 : 1.0,
-                        duration: const Duration(milliseconds: 150),
+                        scale:
+                        _tappedIndex == i ? 0.97 : 1.0,
+                        duration:
+                        const Duration(milliseconds: 150),
                         child: Container(
                           margin:
                           const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius:
+                            BorderRadius.circular(16),
                             boxShadow: const [
                               BoxShadow(
                                 color: Colors.black26,
@@ -893,13 +939,14 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                                 children: [
                                   Column(
                                     children: [
-                                      const Icon(Icons.calendar_today,
+                                      const Icon(
+                                          Icons.calendar_today,
                                           color: Colors.black54),
                                       const SizedBox(height: 4),
                                       Text(
                                         offer['desc'] as String,
-                                        style:
-                                        const TextStyle(fontSize: 13),
+                                        style: const TextStyle(
+                                            fontSize: 13),
                                       ),
                                     ],
                                   ),
@@ -910,8 +957,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                                       const SizedBox(height: 4),
                                       Text(
                                         offer['price'] as String,
-                                        style:
-                                        const TextStyle(fontSize: 13),
+                                        style: const TextStyle(
+                                            fontSize: 13),
                                       ),
                                     ],
                                   ),
@@ -922,8 +969,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                                       const SizedBox(height: 4),
                                       Text(
                                         offer['members'] as String,
-                                        style:
-                                        const TextStyle(fontSize: 13),
+                                        style: const TextStyle(
+                                            fontSize: 13),
                                       ),
                                     ],
                                   ),
@@ -934,14 +981,21 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                                 color: const Color(0xFFcdcc00),
                                 minWidth: 120,
                                 onPressed: () async {
-                                  const url = 'https://www.pyramid-of-giza.com/tours/?ci=1&cm=22692823616_178125126421_c_g_egyptian%20pyramid%20tours_p_&gad_source=1&gad_campaignid=22692823616&gbraid=0AAAAACRC4b0mPfIwiT086U1-HakHmrF2e&gclid=EAIaIQobChMIlfWRzu_3jwMV66KDBx2KuivYEAAYAiAAEgLi-PD_BwE';
-                                  if (await canLaunchUrl(Uri.parse(url))) {
-                                    await launchUrl(Uri.parse(url));
-                                  } else {
-                                    throw 'Could not launch $url';
+                                  final Uri url = Uri.parse(
+                                    'https://www.pyramid-of-giza.com/tours/?ci=1&cm=22692823616_178125126421_c_g_egyptian%20pyramid%20tours_p_&gad_source=1&gad_campaignid=22692823616&gbraid=0AAAAACRC4b0mPfIwiT086U1-HakHmrF2e&gclid=EAIaIQobChMIlfWRzu_3jwMV66KDBx2KuivYEAAYAiAAEgLi-PD_BwE',
+                                  );
+
+                                  if (!await launchUrl(
+                                    url,
+                                    mode: LaunchMode.externalApplication,
+                                  )) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Could not launch the booking URL')),
+                                    );
                                   }
                                 },                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius:
+                                  BorderRadius.circular(12),
                                 ),
                                 child: const Text(
                                   "Book Now",
