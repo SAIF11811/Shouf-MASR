@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// ----------------------
 /// Text Field
@@ -17,6 +18,7 @@ class CustomTextField extends StatefulWidget {
   final VoidCallback? onTap;
   final int maxLines;
   final bool enabled;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
     super.key,
@@ -33,6 +35,7 @@ class CustomTextField extends StatefulWidget {
     this.onTap,
     this.maxLines = 1,
     this.enabled = true,
+    this.inputFormatters,
   });
 
   @override
@@ -57,6 +60,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         onTap: widget.onTap,
         maxLines: widget.isPassword ? 1 : widget.maxLines,
         enabled: widget.enabled,
+        inputFormatters: widget.inputFormatters,
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
@@ -65,7 +69,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         decoration: InputDecoration(
           prefixIcon: widget.prefixIcon != null
               ? Icon(widget.prefixIcon,
-              color: widget.enabled ? Colors.grey.shade700 : Colors.grey.shade400)
+              color: widget.enabled
+                  ? Colors.grey.shade700
+                  : Colors.grey.shade400)
               : null,
           suffixIcon: widget.isPassword
               ? IconButton(
@@ -78,8 +84,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
               : null,
           hintText: widget.hintText,
           filled: true,
-          fillColor: widget.enabled ? Colors.grey.shade50 : Colors.grey.shade200,
-          contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+          fillColor:
+          widget.enabled ? Colors.grey.shade50 : Colors.grey.shade200,
+          contentPadding:
+          const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide: BorderSide(color: Colors.grey.shade300),
@@ -101,7 +109,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+            borderSide:
+            const BorderSide(color: Colors.redAccent, width: 1.5),
           ),
         ),
       ),

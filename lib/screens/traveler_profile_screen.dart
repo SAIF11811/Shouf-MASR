@@ -173,7 +173,7 @@ class TravelerSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text('Profile'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),

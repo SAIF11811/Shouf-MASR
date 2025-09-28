@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 import 'package:shouf_masr/screens/available_offers_screen.dart';
 import '../widgets/traveler_bottom_nav.dart';
 import '../widgets/components.dart';
@@ -39,7 +40,10 @@ class _SearchScreenState extends State<SearchScreen> {
       context: context,
       firstDate: now,
       lastDate: DateTime(now.year + 2),
-      initialDateRange: DateTimeRange(start: now, end: now.add(const Duration(days: 1))),
+      initialDateRange: DateTimeRange(
+        start: now,
+        end: now.add(const Duration(days: 1)),
+      ),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -56,7 +60,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
     if (picked != null) {
       setState(() {
-        _dateController.text = "${_formatDate(picked.start)} - ${_formatDate(picked.end)}";
+        _dateController.text =
+            "${_formatDate(picked.start)} - ${_formatDate(picked.end)}";
       });
     }
   }
@@ -119,7 +124,10 @@ class _SearchScreenState extends State<SearchScreen> {
                           const SizedBox(height: 25),
 
                           // Destination
-                          const _SectionTitle(icon: Icons.location_on, title: 'Destination in Egypt'),
+                          const _SectionTitle(
+                            icon: Icons.location_on,
+                            title: 'Destination in Egypt',
+                          ),
                           const SizedBox(height: 8),
                           Row(
                             children: [
@@ -161,8 +169,12 @@ class _SearchScreenState extends State<SearchScreen> {
                           const SizedBox(height: 20),
 
                           // Travelers
-                          const _SectionTitle(icon: Icons.people, title: 'Number of Travelers'),
+                          const _SectionTitle(
+                            icon: Icons.people,
+                            title: 'Number of Travelers',
+                          ),
                           const SizedBox(height: 8),
+
                           Row(
                             children: [
                               Expanded(
@@ -172,6 +184,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                   hintText: "Adults",
                                   keyboardType: TextInputType.number,
                                   prefixIcon: Icons.person,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -182,6 +197,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                   hintText: "Children",
                                   keyboardType: TextInputType.number,
                                   prefixIcon: Icons.child_care,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
                                 ),
                               ),
                             ],
@@ -189,7 +207,10 @@ class _SearchScreenState extends State<SearchScreen> {
                           const SizedBox(height: 20),
 
                           // Travel Dates
-                          const _SectionTitle(icon: Icons.date_range, title: 'Travel Dates'),
+                          const _SectionTitle(
+                            icon: Icons.date_range,
+                            title: 'Travel Dates',
+                          ),
                           const SizedBox(height: 8),
                           GestureDetector(
                             onTap: _pickDateRange,
@@ -206,7 +227,10 @@ class _SearchScreenState extends State<SearchScreen> {
                           const SizedBox(height: 20),
 
                           // Budget
-                          const _SectionTitle(icon: Icons.attach_money, title: 'Budget Range'),
+                          const _SectionTitle(
+                            icon: Icons.attach_money,
+                            title: 'Budget Range',
+                          ),
                           const SizedBox(height: 8),
                           Row(
                             children: [
@@ -254,13 +278,19 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: CustomElevatedButton(
                               text: "Show Travel Offers",
                               onPressed: () {
-                                Get.to(() => AvailableOffersScreen(
-                                  destination: _isSpecificDestination ? _destinationController.text : "Open",
-                                  adults: _adultController.text,
-                                  children: _childController.text,
-                                  dates: _dateController.text,
-                                  budget: _isSpecificBudget ? _budgetController.text : "Open",
-                                ));
+                                Get.to(
+                                  () => AvailableOffersScreen(
+                                    destination: _isSpecificDestination
+                                        ? _destinationController.text
+                                        : "Open",
+                                    adults: _adultController.text,
+                                    children: _childController.text,
+                                    dates: _dateController.text,
+                                    budget: _isSpecificBudget
+                                        ? _budgetController.text
+                                        : "Open",
+                                  ),
+                                );
                               },
                               fullWidth: true,
                               backgroundColor: const Color(0xFFcdcc00),
@@ -294,7 +324,8 @@ class _SearchScreenState extends State<SearchScreen> {
 class _SectionTitle extends StatelessWidget {
   final IconData icon;
   final String title;
-  const _SectionTitle({required this.icon, required this.title, Key? key}) : super(key: key);
+  const _SectionTitle({required this.icon, required this.title, Key? key})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -319,7 +350,11 @@ class _SectionTitle extends StatelessWidget {
 class DestinationTextField extends StatefulWidget {
   final TextEditingController controller;
   final bool enabled;
-  const DestinationTextField({required this.controller, required this.enabled, Key? key}) : super(key: key);
+  const DestinationTextField({
+    required this.controller,
+    required this.enabled,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DestinationTextField> createState() => _DestinationTextFieldState();
@@ -413,12 +448,21 @@ class _DestinationTextFieldState extends State<DestinationTextField> {
               color: widget.enabled ? Colors.black87 : Colors.grey.shade500,
             ),
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.location_on,
-                  color: widget.enabled ? Colors.grey.shade700 : Colors.grey.shade400),
+              prefixIcon: Icon(
+                Icons.location_on,
+                color: widget.enabled
+                    ? Colors.grey.shade700
+                    : Colors.grey.shade400,
+              ),
               hintText: "Enter specific destination",
               filled: true,
-              fillColor: widget.enabled ? Colors.grey.shade50 : Colors.grey.shade200,
-              contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+              fillColor: widget.enabled
+                  ? Colors.grey.shade50
+                  : Colors.grey.shade200,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 18,
+                horizontal: 16,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide(color: Colors.grey.shade300),
@@ -463,7 +507,7 @@ class _DestinationTextFieldState extends State<DestinationTextField> {
                   color: Colors.grey.shade300,
                   blurRadius: 5,
                   offset: const Offset(0, 2),
-                )
+                ),
               ],
             ),
             constraints: const BoxConstraints(maxHeight: 200),
