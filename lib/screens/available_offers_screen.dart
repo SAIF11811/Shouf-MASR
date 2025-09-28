@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../widgets/components.dart';
+import 'chat_screen.dart';
+import 'company_profile.dart';
 
 class AvailableOffersScreen extends StatefulWidget {
   final String home;
@@ -51,6 +55,117 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
     _controller.dispose();
     super.dispose();
   }
+
+  final List<Map<String, dynamic>> articles = [
+    {
+      "image": "assets/images/2.jpeg",
+      "title": "Walking Through the Temples of Luxor",
+      "author": "By Ancient Trails",
+      "days": "3 Days",
+      "price": "\$350",
+      "rating": 4.8,
+      "company": {
+        "name": "Ancient Trails",
+        "description":
+        "Ancient Trails specializes in immersive cultural journeys across Egypt. Our focus is on ancient temples, ruins, and heritage sites. With professional Egyptologists as guides, travelers gain unique insights into Egyptian history and traditions.",
+        "rating": 5,
+        "trips": [
+          "Guided tours of Karnak and Luxor Temples",
+          "Evening light-and-sound show at Karnak",
+          "Visit to the Valley of the Kings and Queens",
+        ],
+        "packages": [
+          "3-day Luxor cultural experience",
+          "7-day heritage-focused Nile Valley package",
+        ],
+        "reviews": [
+          "The guides were incredibly knowledgeable and brought history to life!",
+          "Perfect for history lovers who enjoy detailed explanations.",
+        ],
+      }
+    },
+    {
+      "image": "assets/images/3.jpeg",
+      "title": "A Timeless Journey Sailing the Nile",
+      "author": "By Nile Cruises",
+      "days": "5 Days",
+      "price": "\$1200",
+      "rating": 4.8,
+      "company": {
+        "name": "Nile Cruises",
+        "description":
+        "Nile Cruises offers luxurious voyages along the Nile, combining relaxation with cultural exploration. Guests enjoy 5-star service, onboard entertainment, and excursions to temples and riverside villages.",
+        "rating": 4.9,
+        "trips": [
+          "4-night cruise from Luxor to Aswan",
+          "Sunset sailing with live traditional music",
+          "Exclusive visit to Philae Temple by boat",
+        ],
+        "packages": [
+          "Luxury Nile Cruise with daily excursions",
+          "Romantic 5-day honeymoon package",
+        ],
+        "reviews": [
+          "The cruise was unforgettable – the views were breathtaking!",
+          "Fantastic food, friendly staff, and perfectly organized tours.",
+        ],
+      }
+    },
+    {
+      "image": "assets/images/4.jpeg",
+      "title": "Discovering Peace at Siwa Oasis",
+      "author": "By Desert Explorer",
+      "days": "4 Days",
+      "price": "\$480",
+      "rating": 3.9,
+      "company": {
+        "name": "Desert Explorer",
+        "description":
+        "Desert Explorer curates adventures in Egypt’s deserts, focusing on oases, dunes, and stargazing experiences. We emphasize eco-friendly tourism and authentic interactions with local communities.",
+        "rating": 4,
+        "trips": [
+          "4x4 jeep safari across the Great Sand Sea",
+          "Traditional dinner under the stars at Siwa",
+          "Visit to Cleopatra’s Spring and Siwa salt lakes",
+        ],
+        "packages": [
+          "Weekend desert camping experience",
+          "5-day Sahara expedition with local guides",
+        ],
+        "reviews": [
+          "Loved the desert nights – so peaceful and magical!",
+          "Friendly guides and a very authentic experience, though a bit basic.",
+        ],
+      }
+    },
+    {
+      "image": "assets/images/6.jpeg",
+      "title": "Inside the Egyptian Museum of Cairo",
+      "author": "By Heritage Guide",
+      "days": "2 Days",
+      "price": "\$250",
+      "rating": 4.2,
+      "company": {
+        "name": "Heritage Guide",
+        "description":
+        "Heritage Guide offers expert-led museum tours across Cairo, focusing on Egypt’s heritage and priceless treasures. Tours are designed for both casual visitors and academic researchers.",
+        "rating": 4.5,
+        "trips": [
+          "Half-day tour of the Egyptian Museum",
+          "Special Tutankhamun exhibition visit",
+          "Evening lecture on ancient Egyptian art",
+        ],
+        "packages": [
+          "Private guided museum tour for families",
+          "Full-day Cairo museums and monuments package",
+        ],
+        "reviews": [
+          "Very informative – the guide explained artifacts in an engaging way.",
+          "Perfect for families and history enthusiasts. Highly recommended!",
+        ],
+      }
+    },
+  ];
 
   final List<Map<String, dynamic>> offers = [
     // 1. Cairo
@@ -875,6 +990,7 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                 itemCount: filteredOffers.length,
                 itemBuilder: (context, i) {
                   final offer = filteredOffers[i];
+                  final article = i < articles.length ? articles[i] : null;
 
                   // Slide animation
                   final animation = Tween<Offset>(
@@ -923,16 +1039,29 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                           padding: const EdgeInsets.all(14),
                           child: Column(
                             crossAxisAlignment:
-                            CrossAxisAlignment.center,
+                            CrossAxisAlignment.start,
                             children: [
                               Text(
-                                offer['title'] as String,
+                                'Company: ${(article?['company'] as Map<String, dynamic>)['name'] ?? 'Unknown Company'}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.end,
+                              ),
+
+                              // Destination
+                              Text(
+                                'Destination: ${offer['title'] ?? 'Unknown Destination'}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 20),
+
                               Row(
                                 mainAxisAlignment:
                                 MainAxisAlignment.spaceEvenly,
@@ -977,33 +1106,48 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                                 ],
                               ),
                               const SizedBox(height: 10),
-                              MaterialButton(
-                                color: const Color(0xFFcdcc00),
-                                minWidth: 120,
-                                onPressed: () async {
-                                  final Uri url = Uri.parse(
-                                    'https://www.pyramid-of-giza.com/tours/?ci=1&cm=22692823616_178125126421_c_g_egyptian%20pyramid%20tours_p_&gad_source=1&gad_campaignid=22692823616&gbraid=0AAAAACRC4b0mPfIwiT086U1-HakHmrF2e&gclid=EAIaIQobChMIlfWRzu_3jwMV66KDBx2KuivYEAAYAiAAEgLi-PD_BwE',
-                                  );
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  CustomElevatedButton(
+                                    text: 'Book Now',
+                                    onPressed: () async {
+                                      final Uri url = Uri.parse(
+                                        'https://travco.com/en/',
+                                      );
 
-                                  if (!await launchUrl(
-                                    url,
-                                    mode: LaunchMode.externalApplication,
-                                  )) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Could not launch the booking URL')),
-                                    );
-                                  }
-                                },                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(12),
-                                ),
-                                child: const Text(
-                                  "Book Now",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                      if (!await launchUrl(
+                                        url,
+                                        mode: LaunchMode.externalApplication,
+                                      )) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text('Could not launch the booking URL')),
+                                        );
+                                      }
+                                    },                                     backgroundColor: const Color(0xFFcdcc00),
+                                    textColor: Colors.white,
+                                    fullWidth: false,
                                   ),
-                                ),
+                                  CustomElevatedButton(
+                                    text: 'Ask',
+                                    onPressed: () {Get.to(() => ChatScreen());},
+                                    backgroundColor: Colors.white,
+                                    textColor: Colors.black,
+                                    fullWidth: false,
+                                  ),
+                                  CustomElevatedButton(
+                                    text: 'Profile',
+                                    onPressed: () {
+                                      final company = article?['company'];
+                                      if (company != null) {
+                                        Get.to(() => CompanyProfileScreen(company: company));
+                                      }
+                                    },
+                                    backgroundColor: Colors.white,
+                                    textColor: Colors.black,
+                                    fullWidth: false,
+                                  ),
+                                ],
                               ),
                             ],
                           ),

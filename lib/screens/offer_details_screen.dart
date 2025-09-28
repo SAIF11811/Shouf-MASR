@@ -215,7 +215,7 @@ class OfferDetailsScreen extends StatelessWidget {
                 ),
                 onPressed: () async {
                   final Uri url = Uri.parse(
-                    'https://www.pyramid-of-giza.com/tours/?ci=1&cm=22692823616_178125126421_c_g_egyptian%20pyramid%20tours_p_&gad_source=1&gad_campaignid=22692823616&gbraid=0AAAAACRC4b0mPfIwiT086U1-HakHmrF2e&gclid=EAIaIQobChMIlfWRzu_3jwMV66KDBx2KuivYEAAYAiAAEgLi-PD_BwE',
+                    'https://travco.com/en/',
                   );
 
                   if (!await launchUrl(
