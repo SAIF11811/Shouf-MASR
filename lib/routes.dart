@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'package:shouf_masr/screens/agency_auth.dart';
 import 'package:shouf_masr/screens/agency_login.dart';
 import 'package:shouf_masr/screens/agency_notifications_screen.dart';
-import 'package:shouf_masr/screens/agency_settings_screen.dart';
-import 'package:shouf_masr/screens/traveler_setting_screen.dart';
+import 'package:shouf_masr/screens/agency_profile_screen.dart';
+import 'package:shouf_masr/screens/traveler_profile_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/role_selection.dart';
 import 'screens/traveler_auth.dart';
@@ -75,8 +75,8 @@ final appRoutes = [
     transition: Transition.rightToLeft,
   ),
   GetPage(name: '/search', page: () => const SearchScreen()),
-  GetPage(name: '/agency-setting', page: () => AgencySettingsScreen()),
-  GetPage(name: '/traveler-setting', page: () => TravelerSettingsScreen()),
+  GetPage(name: '/agency-profile', page: () => AgencyProfileScreen()),
+  GetPage(name: '/traveler-profile', page: () => TravelerSettingsScreen()),
   GetPage(name: '/offers', page: () => const OffersScreen()),
   GetPage(name: '/company-profile', page: () => const CompanyProfileScreen(company: {},)),
   GetPage(name: '/waiting', page: () => const WaitingScreen()),

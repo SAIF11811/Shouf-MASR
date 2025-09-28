@@ -1,9 +1,10 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shouf_masr/screens/role_selection.dart';
-import 'dart:math';
-import 'package:shouf_masr/shared_preference.dart';
 import 'package:shouf_masr/screens/home_screen.dart';
+import 'package:shouf_masr/screens/agency_notifications_screen.dart';
+import 'package:shouf_masr/shared_preference.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -54,9 +55,12 @@ class _SplashScreenState extends State<SplashScreen>
     _scaleController.stop();
     _circleController.stop();
 
-    bool rememberMe = await SharedPreferenceHelper.getRememberMe();
+    final rememberTraveler = await SharedPreferenceHelper.getTravelerRememberMe();
+    final rememberAgency = await SharedPreferenceHelper.getAgencyRememberMe();
 
-    if (rememberMe) {
+    if (rememberAgency) {
+      Get.offAll(() => AgencyNotificationsScreen());
+    } else if (rememberTraveler) {
       Get.offAll(() => const HomeScreen());
     } else {
       Get.offAll(() => const RoleSelection());

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/traveler_notifications_controller.dart';
 import '../widgets/traveler_bottom_nav.dart';
 
 class TravelerNotificationsScreen extends StatelessWidget {
@@ -7,43 +8,8 @@ class TravelerNotificationsScreen extends StatelessWidget {
 
   final RxInt currentIndex = 3.obs;
 
-  final RxList<Map<String, String>> notifications = <Map<String, String>>[
-    {
-      "title": "Pharaoh Travels",
-      "message": "Exclusive discount for a Giza Pyramids tour this weekend!",
-      "time": "2m ago"
-    },
-    {
-      "title": "Nile Star Cruises",
-      "message": "Your luxury cruise booking has been confirmed.",
-      "time": "15m ago"
-    },
-    {
-      "title": "Desert Horizon",
-      "message": "Join our safari adventure to the White Desert.",
-      "time": "1h ago"
-    },
-    {
-      "title": "Red Sea Voyages",
-      "message": "Snorkeling and diving packages are now available.",
-      "time": "3h ago"
-    },
-    {
-      "title": "Cairo Heritage Tours",
-      "message": "Don’t miss the new exhibition at the Egyptian Museum.",
-      "time": "Yesterday"
-    },
-    {
-      "title": "Lotus Travel Agency",
-      "message": "Enjoy a guided tour of Luxor and Karnak temples.",
-      "time": "2d ago"
-    },
-    {
-      "title": "Oasis Explorer",
-      "message": "Experience Siwa Oasis with our special package.",
-      "time": "3d ago"
-    },
-  ].obs;
+  final TravelerNotificationsController controller =
+  Get.put(TravelerNotificationsController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +41,8 @@ class TravelerNotificationsScreen extends StatelessWidget {
                   const Center(
                     child: Text(
                       'Notifications',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                      style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -83,10 +50,10 @@ class TravelerNotificationsScreen extends StatelessWidget {
                     child: Obx(
                           () => ListView.separated(
                         padding: const EdgeInsets.only(bottom: 80),
-                        itemCount: notifications.length,
+                        itemCount: controller.notifications.length,
                         separatorBuilder: (_, __) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
-                          final n = notifications[index];
+                          final n = controller.notifications[index];
                           return Dismissible(
                             key: Key(n["title"]! + n["time"]!),
                             direction: DismissDirection.endToStart,
@@ -95,9 +62,12 @@ class TravelerNotificationsScreen extends StatelessWidget {
                               padding:
                               const EdgeInsets.symmetric(horizontal: 20),
                               color: Colors.red,
-                              child:
-                              const Icon(Icons.delete, color: Colors.white),
+                              child: const Icon(Icons.delete,
+                                  color: Colors.white),
                             ),
+                            onDismissed: (_) {
+                              controller.notifications.removeAt(index);
+                            },
                             child: _notificationCard(
                               title: n["title"],
                               message: n["message"],

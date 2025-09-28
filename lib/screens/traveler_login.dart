@@ -38,7 +38,7 @@ class _TravelerLoginState extends State<TravelerLogin> {
 
   void _login() async {
     if (_formKey.currentState!.validate()) {
-      await SharedPreferenceHelper.setRememberMe(_rememberMe);
+      await SharedPreferenceHelper.setTravelerRememberMe(_rememberMe);
       Get.offAllNamed('/home');
     }
   }

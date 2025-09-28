@@ -14,7 +14,7 @@ class AgencyBottomNav extends StatelessWidget {
         Get.offAllNamed('/send-offer');
         break;
       case 2:
-        Get.offAllNamed('/agency-setting');
+        Get.offAllNamed('/agency-profile');
         break;
       default:
         Get.offAllNamed('/agency_notifications');
@@ -27,7 +27,7 @@ class AgencyBottomNav extends StatelessWidget {
     final items = [
       {'icon': Icons.notifications, 'label': 'Notifications'},
       {'icon': Icons.local_offer, 'label': 'Send Offer'},
-      {'icon': Icons.settings, 'label': 'Settings'},
+      {'icon': Icons.person, 'label': 'Profile'},
     ];
 
     return Padding(

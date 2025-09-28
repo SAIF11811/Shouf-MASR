@@ -20,7 +20,7 @@ class TravelerBottomNav extends StatelessWidget {
         Get.offAllNamed('/traveler_notifications');
         break;
       case 4:
-        Get.offAllNamed('/traveler-setting');
+        Get.offAllNamed('/traveler-profile');
         break;
       default:
         Get.offAllNamed('/home');
@@ -35,7 +35,7 @@ class TravelerBottomNav extends StatelessWidget {
       {'icon': Icons.local_offer, 'label': 'Offers'},
       {'icon': Icons.search, 'label': 'Search'},
       {'icon': Icons.notifications, 'label': 'Notifications'},
-      {'icon': Icons.settings, 'label': 'Settings'},
+      {'icon': Icons.person, 'label': 'Profile'},
     ];
 
     return Padding(

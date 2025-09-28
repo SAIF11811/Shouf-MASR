@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../shared_preference.dart';
 import '../widgets/components.dart';
 import 'role_selection.dart';
@@ -28,12 +27,17 @@ class _AgencyLoginState extends State<AgencyLogin> {
   }
 
   void _loadSavedLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? remember = prefs.getBool('remember_me') ?? false;
-
+    final remember = await SharedPreferenceHelper.getAgencyRememberMe();
     if (remember) {
+      final company = await SharedPreferenceHelper.getCompany();
+      final email = await SharedPreferenceHelper.getEmail();
+      final password = await SharedPreferenceHelper.getPassword();
+
       setState(() {
         _rememberMe = true;
+        if (company != null) companyController.text = company;
+        if (email != null) emailController.text = email;
+        if (password != null) passwordController.text = password;
       });
     }
   }
@@ -47,7 +51,12 @@ class _AgencyLoginState extends State<AgencyLogin> {
       if (company == "EgyTrips" &&
           email == "egytrips@gmail.com" &&
           password == "egy123") {
-        await SharedPreferenceHelper.setRememberMe(_rememberMe);
+        await SharedPreferenceHelper.setAgencyRememberMe(
+          _rememberMe,
+          company: company,
+          email: email,
+          password: password,
+        );
         Get.offAll(() => AgencyNotificationsScreen());
       } else {
         Get.snackbar(
@@ -83,47 +92,45 @@ class _AgencyLoginState extends State<AgencyLogin> {
                     ),
                   ),
                   const SizedBox(height: 30),
-
                   Form(
                     key: _formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomTextField(
                           controller: companyController,
                           label: "Company Name",
                           hintText: "Enter company name",
                           prefixIcon: Icons.business,
-                          validator: (val) => val != null && val.isNotEmpty
+                          validator: (val) =>
+                          val != null && val.isNotEmpty
                               ? null
                               : "Enter company name",
                         ),
                         const SizedBox(height: 16),
-
                         CustomTextField(
                           controller: emailController,
                           label: "Email",
                           hintText: "Enter email address",
                           prefixIcon: Icons.email,
                           keyboardType: TextInputType.emailAddress,
-                          validator: (val) => val != null && val.contains("@")
+                          validator: (val) =>
+                          val != null && val.contains("@")
                               ? null
                               : "Invalid email",
                         ),
                         const SizedBox(height: 16),
-
                         CustomTextField(
                           controller: passwordController,
                           label: "Password",
                           hintText: "Enter password",
                           isPassword: true,
                           prefixIcon: Icons.lock,
-                          validator: (val) => val != null && val.length >= 3
+                          validator: (val) =>
+                          val != null && val.length >= 3
                               ? null
                               : "Min 3 characters",
                         ),
                         const SizedBox(height: 12),
-
                         Row(
                           children: [
                             Checkbox(
@@ -142,7 +149,6 @@ class _AgencyLoginState extends State<AgencyLogin> {
                           ],
                         ),
                         const SizedBox(height: 24),
-
                         Center(
                           child: CustomElevatedButton(
                             text: "Log In",
@@ -155,7 +161,6 @@ class _AgencyLoginState extends State<AgencyLogin> {
                           ),
                         ),
                         const SizedBox(height: 20),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -168,7 +173,8 @@ class _AgencyLoginState extends State<AgencyLogin> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () => Get.to(() => const AgencySignup()),
+                              onPressed: () =>
+                                  Get.to(() => const AgencySignup()),
                               child: const Text(
                                 "Sign Up",
                                 style: TextStyle(

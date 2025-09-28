@@ -1,73 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:shouf_masr/widgets/agency_bottom_nav.dart';
+import 'package:get/get.dart';
+import '../controllers/agency_notifications_controller.dart';
+import '../widgets/agency_bottom_nav.dart';
 
 class AgencyNotificationsScreen extends StatefulWidget {
-  const AgencyNotificationsScreen({super.key});
+  AgencyNotificationsScreen({super.key});
 
   @override
-  State<AgencyNotificationsScreen> createState() =>
-      _AgencyNotificationsScreenState();
+  State<AgencyNotificationsScreen> createState() => _AgencyNotificationsScreenState();
 }
 
 class _AgencyNotificationsScreenState extends State<AgencyNotificationsScreen> {
-  List<Map<String, dynamic>> agencyOffers = [
-    {
-      "person": "Ahmed Ali",
-      "destination": "Giza Pyramids",
-      "duration": "2 days",
-      "budget": 1500,
-      "members": 2,
-      "time": "2m ago",
-    },
-    {
-      "person": "Sara Hassan",
-      "destination": "Luxor to Aswan",
-      "duration": "3 days",
-      "budget": 3000,
-      "members": 4,
-      "time": "15m ago",
-    },
-    {
-      "person": "Mohamed Farouk",
-      "destination": "White Desert",
-      "duration": "1 day",
-      "budget": 1200,
-      "members": 1,
-      "time": "1h ago",
-    },
-    {
-      "person": "Nour Adel",
-      "destination": "Sharm El-Sheikh",
-      "duration": "5 days",
-      "budget": 5000,
-      "members": 3,
-      "time": "3h ago",
-    },
-    {
-      "person": "Khaled Mostafa",
-      "destination": "Egyptian Museum",
-      "duration": "Half day",
-      "budget": 300,
-      "members": 1,
-      "time": "Yesterday",
-    },
-    {
-      "person": "Mona Samir",
-      "destination": "Luxor & Karnak temples",
-      "duration": "2 days",
-      "budget": 2000,
-      "members": 2,
-      "time": "2d ago",
-    },
-    {
-      "person": "Omar Taha",
-      "destination": "Siwa Oasis",
-      "duration": "3 days",
-      "budget": 4000,
-      "members": 2,
-      "time": "3d ago",
-    },
-  ];
+  final AgencyNotificationsController controller =
+  Get.put(AgencyNotificationsController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -102,32 +47,39 @@ class _AgencyNotificationsScreenState extends State<AgencyNotificationsScreen> {
                   ),
                   const SizedBox(height: 24),
                   Expanded(
-                    child: ListView.separated(
-                      padding: const EdgeInsets.only(bottom: 80),
-                      itemCount: agencyOffers.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final offer = agencyOffers[index];
-                        return Dismissible(
-                          key: Key(offer["person"] + offer["time"]),
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            color: Colors.red,
-                            child: const Icon(Icons.delete, color: Colors.white),
-                          ),
-                          child: _offerCard(
-                            person: offer["person"],
-                            destination: offer["destination"],
-                            duration: offer["duration"],
-                            budget: offer["budget"],
-                            members: offer["members"],
-                            time: offer["time"],
-                            colorIndex: index,
-                          ),
-                        );
-                      },
+                    child: Obx(
+                          () => ListView.separated(
+                        padding: const EdgeInsets.only(bottom: 80),
+                        itemCount: controller.agencyOffers.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final offer = controller.agencyOffers[index];
+                          return Dismissible(
+                            key: Key(offer["person"] + offer["time"]),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 20),
+                              color: Colors.red,
+                              child: const Icon(Icons.delete,
+                                  color: Colors.white),
+                            ),
+                            onDismissed: (_) {
+                              controller.removeOffer(index);
+                            },
+                            child: _offerCard(
+                              person: offer["person"],
+                              destination: offer["destination"],
+                              duration: offer["duration"],
+                              budget: offer["budget"],
+                              members: offer["members"],
+                              time: offer["time"],
+                              colorIndex: index,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
