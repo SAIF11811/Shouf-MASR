@@ -79,8 +79,14 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
           "7-day heritage-focused Nile Valley package",
         ],
         "reviews": [
-          "The guides were incredibly knowledgeable and brought history to life!",
-          "Perfect for history lovers who enjoy detailed explanations.",
+          {
+            "text": "The guides were incredibly knowledgeable and brought history to life!",
+            "rating": 5,
+          },
+          {
+            "text": "Perfect for history lovers who enjoy detailed explanations.",
+            "rating": 4,
+          },
         ],
       }
     },
@@ -106,8 +112,14 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
           "Romantic 5-day honeymoon package",
         ],
         "reviews": [
-          "The cruise was unforgettable – the views were breathtaking!",
-          "Fantastic food, friendly staff, and perfectly organized tours.",
+          {
+            "text": "The cruise was unforgettable – the views were breathtaking!",
+            "rating": 5,
+          },
+          {
+            "text": "Fantastic food, friendly staff, and perfectly organized tours.",
+            "rating": 4,
+          },
         ],
       }
     },
@@ -133,8 +145,15 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
           "5-day Sahara expedition with local guides",
         ],
         "reviews": [
-          "Loved the desert nights – so peaceful and magical!",
-          "Friendly guides and a very authentic experience, though a bit basic.",
+          {
+            "text": "Loved the desert nights – so peaceful and magical!",
+            "rating": 5,
+          },
+          {
+            "text":
+            "Friendly guides and a very authentic experience, though a bit basic.",
+            "rating": 3,
+          },
         ],
       }
     },
@@ -160,8 +179,15 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
           "Full-day Cairo museums and monuments package",
         ],
         "reviews": [
-          "Very informative – the guide explained artifacts in an engaging way.",
-          "Perfect for families and history enthusiasts. Highly recommended!",
+          {
+            "text": "Very informative – the guide explained artifacts in an engaging way.",
+            "rating": 4,
+          },
+          {
+            "text":
+            "Perfect for families and history enthusiasts. Highly recommended!",
+            "rating": 5,
+          },
         ],
       }
     },
@@ -813,7 +839,10 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
     }
 
     bool _matchOfferDays(String offerDesc, int selectedDays) {
-      final numbers = RegExp(r'\d+').allMatches(offerDesc).map((m) => int.parse(m.group(0)!)).toList();
+      final numbers = RegExp(r'\d+')
+          .allMatches(offerDesc)
+          .map((m) => int.parse(m.group(0)!))
+          .toList();
       if (numbers.isEmpty) return true;
 
       final minDays = numbers.reduce((a, b) => a < b ? a : b);
@@ -824,10 +853,11 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
 
     final filteredOffers = offers.where((offer) {
       final price = int.tryParse(
-          offer["price"].toString().replaceAll(RegExp(r'[^0-9]'), "")
-      ) ?? 0;
+        offer["price"]?.toString().replaceAll(RegExp(r'[^0-9]'), "") ?? "",
+      ) ??
+          0;
 
-      final title = offer["title"].toString().toLowerCase();
+      final title = offer["title"]?.toString().toLowerCase() ?? "";
       final selectedDays = _calculateSelectedDays(widget.dates);
 
       // Destination match
@@ -838,18 +868,20 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
       }
 
       // Budget match
-      if (enteredBudget != null && enteredBudget > 0 && price > enteredBudget) {
+      if (enteredBudget != null &&
+          enteredBudget > 0 &&
+          price > enteredBudget) {
         return false;
       }
 
       // Days match
-      if (selectedDays > 0 && !_matchOfferDays(offer["desc"].toString(), selectedDays)) {
+      if (selectedDays > 0 &&
+          !_matchOfferDays(offer["desc"]?.toString() ?? "", selectedDays)) {
         return false;
       }
 
       return true;
     }).toList();
-
 
     return Scaffold(
       appBar: AppBar(
@@ -892,7 +924,9 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                       ],
                     ),
                     const Divider(
-                        height: 20, thickness: 1.2, color: Colors.grey),
+                        height: 20,
+                        thickness: 1.2,
+                        color: Colors.grey),
                     Row(
                       children: [
                         const Icon(Icons.home,
@@ -902,7 +936,7 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                           child: Text(
                             widget.home.isEmpty
                                 ? "Not Determined"
-                                : widget.destination,
+                                : widget.home,
                             style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600),
@@ -931,36 +965,42 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        const Icon(Icons.people, color: Colors.blueAccent),
+                        const Icon(Icons.people,
+                            color: Colors.blueAccent),
                         const SizedBox(width: 8),
                         Text(
                           "${widget.adults} Adults, ${widget.children} Children",
                           style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        const Icon(Icons.date_range, color: Colors.green),
+                        const Icon(Icons.date_range,
+                            color: Colors.green),
                         const SizedBox(width: 8),
                         Text(
                           widget.dates,
                           style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        const Icon(Icons.attach_money, color: Colors.amber),
+                        const Icon(Icons.attach_money,
+                            color: Colors.amber),
                         const SizedBox(width: 8),
                         Text(
                           widget.budget,
                           style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -972,7 +1012,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
             const Center(
               child: Text(
                 "Available Offers",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 10),
@@ -981,8 +1022,8 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                   ? const Center(
                 child: Text(
                   "No offers found for your criteria.",
-                  style:
-                  TextStyle(fontSize: 16, color: Colors.grey),
+                  style: TextStyle(
+                      fontSize: 16, color: Colors.grey),
                 ),
               )
                   : ListView.builder(
@@ -990,7 +1031,10 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                 itemCount: filteredOffers.length,
                 itemBuilder: (context, i) {
                   final offer = filteredOffers[i];
-                  final article = i < articles.length ? articles[i] : null;
+                  final article =
+                  i < articles.length ? articles[i] : null;
+                  final company = article?['company']
+                  as Map<String, dynamic>?;
 
                   // Slide animation
                   final animation = Tween<Offset>(
@@ -1017,15 +1061,14 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                       onTapCancel: () =>
                           setState(() => _tappedIndex = -1),
                       child: AnimatedScale(
-                        scale:
-                        _tappedIndex == i ? 0.97 : 1.0,
-                        duration:
-                        const Duration(milliseconds: 150),
+                        scale: _tappedIndex == i ? 0.97 : 1.0,
+                        duration: const Duration(milliseconds: 150),
                         child: Container(
-                          margin:
-                          const EdgeInsets.symmetric(vertical: 10),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 10),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.9),
+                            color:
+                            Colors.white.withOpacity(0.9),
                             borderRadius:
                             BorderRadius.circular(16),
                             boxShadow: const [
@@ -1042,7 +1085,7 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                             CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Company: ${(article?['company'] as Map<String, dynamic>)['name'] ?? 'Unknown Company'}',
+                                'Company: ${company?['name'] ?? 'Agency'}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -1053,27 +1096,34 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
 
                               // Destination
                               Text(
-                                'Destination: ${offer['title'] ?? 'Unknown Destination'}',
+                                'Destination: ${offer['title']?.toString() ?? 'Unknown Destination'}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
-                                overflow: TextOverflow.ellipsis,
+                                overflow:
+                                TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 20),
 
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceEvenly,
+                                MainAxisAlignment
+                                    .spaceEvenly,
                                 children: [
                                   Column(
                                     children: [
                                       const Icon(
-                                          Icons.calendar_today,
-                                          color: Colors.black54),
-                                      const SizedBox(height: 4),
+                                          Icons
+                                              .calendar_today,
+                                          color:
+                                          Colors.black54),
+                                      const SizedBox(
+                                          height: 4),
                                       Text(
-                                        offer['desc'] as String,
+                                        offer['desc']
+                                            ?.toString() ??
+                                            '',
                                         style: const TextStyle(
                                             fontSize: 13),
                                       ),
@@ -1081,11 +1131,17 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                                   ),
                                   Column(
                                     children: [
-                                      const Icon(Icons.attach_money,
-                                          color: Colors.black54),
-                                      const SizedBox(height: 4),
+                                      const Icon(
+                                          Icons
+                                              .attach_money,
+                                          color:
+                                          Colors.black54),
+                                      const SizedBox(
+                                          height: 4),
                                       Text(
-                                        offer['price'] as String,
+                                        offer['price']
+                                            ?.toString() ??
+                                            '',
                                         style: const TextStyle(
                                             fontSize: 13),
                                       ),
@@ -1093,11 +1149,16 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                                   ),
                                   Column(
                                     children: [
-                                      const Icon(Icons.people,
-                                          color: Colors.blue),
-                                      const SizedBox(height: 4),
+                                      const Icon(
+                                          Icons.people,
+                                          color:
+                                          Colors.blue),
+                                      const SizedBox(
+                                          height: 4),
                                       Text(
-                                        offer['members'] as String,
+                                        offer['members']
+                                            ?.toString() ??
+                                            '',
                                         style: const TextStyle(
                                             fontSize: 13),
                                       ),
@@ -1107,43 +1168,60 @@ class _AvailableOffersScreenState extends State<AvailableOffersScreen>
                               ),
                               const SizedBox(height: 10),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                MainAxisAlignment
+                                    .spaceEvenly,
                                 children: [
                                   CustomElevatedButton(
                                     text: 'Book Now',
                                     onPressed: () async {
-                                      final Uri url = Uri.parse(
-                                        'https://travco.com/en/',
-                                      );
+                                      final Uri url =
+                                      Uri.parse(
+                                          'https://travco.com/en/');
 
                                       if (!await launchUrl(
                                         url,
-                                        mode: LaunchMode.externalApplication,
+                                        mode: LaunchMode
+                                            .externalApplication,
                                       )) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text('Could not launch the booking URL')),
+                                        ScaffoldMessenger.of(
+                                            context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Could not launch the booking URL')),
                                         );
                                       }
-                                    },                                     backgroundColor: const Color(0xFFcdcc00),
+                                    },
+                                    backgroundColor:
+                                    const Color(
+                                        0xFFcdcc00),
                                     textColor: Colors.white,
                                     fullWidth: false,
                                   ),
                                   CustomElevatedButton(
                                     text: 'Ask',
-                                    onPressed: () {Get.to(() => ChatScreen());},
-                                    backgroundColor: Colors.white,
+                                    onPressed: () {
+                                      Get.to(() =>
+                                          ChatScreen());
+                                    },
+                                    backgroundColor:
+                                    Colors.white,
                                     textColor: Colors.black,
                                     fullWidth: false,
                                   ),
                                   CustomElevatedButton(
                                     text: 'Profile',
                                     onPressed: () {
-                                      final company = article?['company'];
                                       if (company != null) {
-                                        Get.to(() => CompanyProfileScreen(company: company));
+                                        Get.to(() =>
+                                            CompanyProfileScreen(
+                                                company:
+                                                company));
                                       }
                                     },
-                                    backgroundColor: Colors.white,
+                                    backgroundColor:
+                                    Colors.white,
                                     textColor: Colors.black,
                                     fullWidth: false,
                                   ),

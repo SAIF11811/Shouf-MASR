@@ -41,8 +41,14 @@ class _OffersScreenState extends State<OffersScreen>
           "7-day heritage-focused Nile Valley package",
         ],
         "reviews": [
-          "The guides were incredibly knowledgeable and brought history to life!",
-          "Perfect for history lovers who enjoy detailed explanations.",
+          {
+            "text": "The guides were incredibly knowledgeable and brought history to life!",
+            "rating": 5,
+          },
+          {
+            "text": "Perfect for history lovers who enjoy detailed explanations.",
+            "rating": 4,
+          },
         ],
       }
     },
@@ -68,8 +74,14 @@ class _OffersScreenState extends State<OffersScreen>
           "Romantic 5-day honeymoon package",
         ],
         "reviews": [
-          "The cruise was unforgettable – the views were breathtaking!",
-          "Fantastic food, friendly staff, and perfectly organized tours.",
+          {
+            "text": "The cruise was unforgettable – the views were breathtaking!",
+            "rating": 5,
+          },
+          {
+            "text": "Fantastic food, friendly staff, and perfectly organized tours.",
+            "rating": 4,
+          },
         ],
       }
     },
@@ -95,8 +107,15 @@ class _OffersScreenState extends State<OffersScreen>
           "5-day Sahara expedition with local guides",
         ],
         "reviews": [
-          "Loved the desert nights – so peaceful and magical!",
-          "Friendly guides and a very authentic experience, though a bit basic.",
+          {
+            "text": "Loved the desert nights – so peaceful and magical!",
+            "rating": 5,
+          },
+          {
+            "text":
+            "Friendly guides and a very authentic experience, though a bit basic.",
+            "rating": 3,
+          },
         ],
       }
     },
@@ -122,13 +141,19 @@ class _OffersScreenState extends State<OffersScreen>
           "Full-day Cairo museums and monuments package",
         ],
         "reviews": [
-          "Very informative – the guide explained artifacts in an engaging way.",
-          "Perfect for families and history enthusiasts. Highly recommended!",
+          {
+            "text": "Very informative – the guide explained artifacts in an engaging way.",
+            "rating": 4,
+          },
+          {
+            "text":
+            "Perfect for families and history enthusiasts. Highly recommended!",
+            "rating": 5,
+          },
         ],
       }
     },
   ];
-
 
   @override
   Widget build(BuildContext context) {

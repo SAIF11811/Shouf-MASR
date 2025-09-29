@@ -1,33 +1,72 @@
 import 'package:flutter/material.dart';
 
-class CompanyProfileScreen extends StatelessWidget {
+class CompanyProfileScreen extends StatefulWidget {
   final Map<String, dynamic>? company;
 
   const CompanyProfileScreen({super.key, this.company});
 
   @override
-  Widget build(BuildContext context) {
-    final data = company ?? {
+  State<CompanyProfileScreen> createState() => _CompanyProfileScreenState();
+}
+
+class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
+  late Map<String, dynamic> data;
+  final TextEditingController _reviewController = TextEditingController();
+  int _selectedRating = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    data = widget.company ?? {
       "name": "Unknown Company",
       "description": "No description available.",
       "rating": 0.0,
       "trips": <String>[],
       "packages": <String>[],
-      "reviews": <String>[],
+      "reviews": <Map<String, dynamic>>[],
     };
+    if (data['reviews'] is List<String>) {
+      data['reviews'] = (data['reviews'] as List<String>)
+          .map((r) => {"text": r, "rating": 0})
+          .toList();
+    }
+  }
 
+  void _addReview() {
+    final newReview = _reviewController.text.trim();
+    if (newReview.isNotEmpty && _selectedRating > 0) {
+      setState(() {
+        (data['reviews'] as List).add({
+          "text": newReview,
+          "rating": _selectedRating,
+        });
+        final reviews = data['reviews'] as List<Map<String, dynamic>>;
+        if (reviews.isNotEmpty) {
+          data['rating'] = reviews
+              .map((r) => r["rating"] as int)
+              .reduce((a, b) => a + b) /
+              reviews.length;
+        }
+      });
+      _reviewController.clear();
+      _selectedRating = 0;
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final double rating =
     (data['rating'] is num) ? (data['rating'] as num).toDouble() : 0.0;
     final List trips = (data['trips'] is List) ? data['trips'] : <String>[];
-    final List packages = (data['packages'] is List) ? data['packages'] : <String>[];
-    final List reviews = (data['reviews'] is List) ? data['reviews'] : <String>[];
+    final List packages =
+    (data['packages'] is List) ? data['packages'] : <String>[];
+    final List reviews =
+    (data['reviews'] is List) ? data['reviews'] : <Map<String, dynamic>>[];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Company Profile",
-          style: const TextStyle(color: Colors.black),
-        ),
+        title: const Text("Company Profile", style: TextStyle(color: Colors.black)),
         backgroundColor: const Color(0xFFcdcc00),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
@@ -42,7 +81,6 @@ class CompanyProfileScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // Display company name prominently
             Center(
               child: Text(
                 data['name'] ?? "Unknown Company",
@@ -55,7 +93,6 @@ class CompanyProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
             _sectionCard(
               title: "About",
               child: Text(
@@ -93,12 +130,84 @@ class CompanyProfileScreen extends StatelessWidget {
             ),
             _sectionCard(
               title: "Reviews",
-              child: reviews.isNotEmpty
-                  ? Column(
-                  children:
-                  reviews.map((r) => _reviewTile(r.toString())).toList())
-                  : const Text("No reviews yet.",
-                  style: TextStyle(color: Colors.grey)),
+              child: Column(
+                children: [
+                  reviews.isNotEmpty
+                      ? Column(
+                    children: reviews
+                        .map((r) => _reviewTile(
+                      r["text"].toString(),
+                      r["rating"] as int,
+                    ))
+                        .toList(),
+                  )
+                      : const Text("No reviews yet.",
+                      style: TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 12),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => StatefulBuilder(
+                          builder: (ctx, setStateDialog) => AlertDialog(
+                            title: const Text("Add Review"),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextField(
+                                  controller: _reviewController,
+                                  decoration: const InputDecoration(
+                                    hintText: "Write your review...",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  maxLines: 3,
+                                ),
+                                const SizedBox(height: 12),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(5, (index) {
+                                    return IconButton(
+                                      icon: Icon(
+                                        index < _selectedRating
+                                            ? Icons.star
+                                            : Icons.star_border,
+                                        color: Colors.amber,
+                                      ),
+                                      onPressed: () {
+                                        setStateDialog(() {
+                                          _selectedRating = index + 1;
+                                        });
+                                      },
+                                    );
+                                  }),
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx),
+                                child: const Text("Cancel"),
+                              ),
+                              ElevatedButton(
+                                onPressed: _addReview,
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFFcdcc00)),
+                                child: const Text("Submit"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.add_comment),
+                    label: const Text("Add Review"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFcdcc00),
+                      foregroundColor: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -171,18 +280,40 @@ class CompanyProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _reviewTile(String review) {
+  Widget _reviewTile(String review, int rating) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(12),
-      decoration:
-      BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(10)),
-      child: Row(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.person, color: Colors.grey, size: 20),
-          const SizedBox(width: 8),
-          Expanded(child: Text(review, style: const TextStyle(fontSize: 13, height: 1.3))),
+          Row(
+            children: List.generate(5, (index) {
+              return Icon(
+                index < rating ? Icons.star : Icons.star_border,
+                color: Colors.amber,
+                size: 18,
+              );
+            }),
+          ),
+          const SizedBox(height: 6),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.person, color: Colors.grey, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  review,
+                  style: const TextStyle(fontSize: 13, height: 1.3),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
