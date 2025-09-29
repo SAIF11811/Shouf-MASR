@@ -38,10 +38,22 @@ class _TravelerLoginState extends State<TravelerLogin> {
 
   void _login() async {
     if (_formKey.currentState!.validate()) {
-      await SharedPreferenceHelper.setTravelerRememberMe(_rememberMe);
-      Get.offAllNamed('/home');
+      if (emailController.text == 'ahmed@gmail.com' &&
+          passwordController.text == '123456') {
+        await SharedPreferenceHelper.setTravelerRememberMe(_rememberMe);
+        Get.offAllNamed('/home');
+      } else {
+        Get.snackbar(
+          "Login Failed",
+          "Invalid email or password",
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +92,6 @@ class _TravelerLoginState extends State<TravelerLogin> {
                             if (value == null || value.isEmpty) {
                               return "Email required";
                             }
-                            // Simple regex to check email pattern
                             final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                             if (!emailRegex.hasMatch(value)) {
                               return "Invalid email";

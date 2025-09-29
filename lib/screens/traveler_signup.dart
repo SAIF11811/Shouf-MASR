@@ -38,7 +38,7 @@ class _TravelerSignupState extends State<TravelerSignup> {
   void _signup() async {
     if (_formKey.currentState!.validate()) {
       await SharedPreferenceHelper.setTravelerRememberMe(_rememberMe);
-      Get.offAllNamed('/home');
+      Get.offAllNamed('/wait');
     }
   }
 
@@ -76,7 +76,7 @@ class _TravelerSignupState extends State<TravelerSignup> {
                           prefixIcon: Icons.person,
                           validator: (value) =>
                           value == null || value.isEmpty
-                              ? "Enter your name"
+                              ? "Enter your full name"
                               : null,
                         ),
                         const SizedBox(height: 16),
@@ -86,10 +86,16 @@ class _TravelerSignupState extends State<TravelerSignup> {
                           hintText: "Enter email",
                           prefixIcon: Icons.email,
                           keyboardType: TextInputType.emailAddress,
-                          validator: (value) =>
-                          value != null && value.contains("@")
-                              ? null
-                              : "Invalid email",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Email required";
+                            }
+                            final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                            if (!emailRegex.hasMatch(value)) {
+                              return "Invalid email";
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 16),
                         CustomTextField(

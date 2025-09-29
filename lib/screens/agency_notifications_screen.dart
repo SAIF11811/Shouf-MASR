@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shouf_masr/screens/send_another_offer_screen.dart';
 import '../controllers/agency_notifications_controller.dart';
 import '../widgets/agency_bottom_nav.dart';
 
@@ -255,137 +256,7 @@ Widget _offerCard({
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
-                      final _formKey = GlobalKey<FormState>();
-                      final TextEditingController _destinationController = TextEditingController();
-                      final TextEditingController _dateControllerSheet = TextEditingController();
-                      final TextEditingController _budgetController = TextEditingController();
-
-                      Future<void> _pickDateRangeSheet() async {
-                        final DateTime now = DateTime.now();
-                        final picked = await showDateRangePicker(
-                          context: Get.context!,
-                          firstDate: now,
-                          lastDate: DateTime(now.year + 2),
-                          initialDateRange: DateTimeRange(
-                            start: now,
-                            end: now.add(const Duration(days: 1)),
-                          ),
-                        );
-                        if (picked != null) {
-                          _dateControllerSheet.text =
-                          "${picked.start.day}/${picked.start.month}/${picked.start.year} - "
-                              "${picked.end.day}/${picked.end.month}/${picked.end.year}";
-                        }
-                      }
-
-                      Get.bottomSheet(
-                        SingleChildScrollView(
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                            ),
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Center(
-                                    child: Container(
-                                      width: 50,
-                                      height: 5,
-                                      margin: const EdgeInsets.only(bottom: 20),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[400],
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: const Text(
-                                      "The Another Offer",
-                                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 30),
-                                  TextFormField(
-                                    controller: _destinationController,
-                                    decoration: const InputDecoration(
-                                      labelText: "Destination",
-                                      hintText: "Enter destination",
-                                      prefixIcon: Icon(Icons.location_on),
-                                      border: UnderlineInputBorder(),
-                                    ),
-                                    validator: (value) =>
-                                    value == null || value.isEmpty ? "Destination is required" : null,
-                                  ),
-                                  const SizedBox(height: 30),
-                                  GestureDetector(
-                                    onTap: _pickDateRangeSheet,
-                                    child: AbsorbPointer(
-                                      child: TextFormField(
-                                        controller: _dateControllerSheet,
-                                        readOnly: true,
-                                        decoration: const InputDecoration(
-                                          labelText: "Travel Dates",
-                                          hintText: "Select travel dates",
-                                          prefixIcon: Icon(Icons.calendar_today),
-                                          border: UnderlineInputBorder(),
-                                        ),
-                                        validator: (value) =>
-                                        value == null || value.isEmpty ? "Travel dates required" : null,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 30),
-                                  TextFormField(
-                                    controller: _budgetController,
-                                    keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
-                                      labelText: "Budget",
-                                      hintText: "Enter cost",
-                                      prefixIcon: Icon(Icons.attach_money),
-                                      border: UnderlineInputBorder(),
-                                    ),
-                                    validator: (value) =>
-                                    value == null || value.isEmpty ? "Budget is required" : null,
-                                  ),
-                                  const SizedBox(height: 50),
-                                  ElevatedButton.icon(
-                                    onPressed: () async {
-                                      if (_formKey.currentState!.validate()) {
-                                        Get.back();
-                                        Get.snackbar(
-                                          "Offer Sent",
-                                          "Your offer has been sent successfully!",
-                                          snackPosition: SnackPosition.BOTTOM,
-                                          backgroundColor: Colors.green,
-                                          colorText: Colors.white,
-                                          duration: const Duration(seconds: 1),
-                                        );
-
-                                        isRemoved.value = true;
-
-                                        await Future.delayed(const Duration(milliseconds: 400));
-                                        onRemove();
-                                      }
-                                    },
-                                    icon: const Icon(Icons.send),
-                                    label: const Text("Send Offer"),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFFcdcc00),
-                                      foregroundColor: Colors.white,
-                                      minimumSize: const Size.fromHeight(50),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        isScrollControlled: true,
-                      );
+                      Get.to(() => SendAnotherOfferScreen());
                     },
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                     child: const Text(

@@ -4,7 +4,7 @@ import '../shared_preference.dart';
 import '../widgets/traveler_bottom_nav.dart';
 
 class TravelerSettingsController extends GetxController {
-  RxString travelerName = 'Ahmed Mohamed'.obs;
+  RxString travelerName = 'Ahmed'.obs;
   RxString travelerEmail = 'ahmed@gmail.com'.obs;
   RxString travelerLanguage = 'English'.obs;
 
